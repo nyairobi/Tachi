@@ -118,6 +118,10 @@ export default function TableFolderList({
 
 								onFolderRowNavigate?.();
 							}}
+							// TEMP
+							style={
+								data.folder.slug.includes("p") ? { paddingLeft: "30px" } : undefined
+							}
 							to={`/u/${reqUser.username}/games/${game}/folders/${data.folder.slug}`}
 						>
 							<div className="d-flex flex-column flex-lg-row align-items-lg-center gap-1 gap-lg-2">

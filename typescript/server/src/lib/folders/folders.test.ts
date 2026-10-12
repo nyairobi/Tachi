@@ -19,17 +19,19 @@ describe("BuildFolderQuery", () => {
 		const folders = JSON.parse(
 			fs.readFileSync(path.join(DEFAULT_SEEDS_DIR, "folders.json"), "utf8"),
 		) as Array<SEEDS_FolderDocument>;
-		const predicates = folders.map((folder) => {
-			const versionFilter = folder.versionFilter?.length
-				? sql`
+		const predicates = folders
+			.filter((f) => f.where !== undefined)
+			.map((folder) => {
+				const versionFilter = folder.versionFilter?.length
+					? sql`
 					AND chart.versions && ARRAY[${sql.join(
 						folder.versionFilter.map((version) => sql`${version}`),
 					)}]::text[]
 				`
-				: sql``;
+					: sql``;
 
-			return sql`(${sql.raw(folder.where)}) AND chart.game = ${folder.game} ${versionFilter}`;
-		});
+				return sql`(${sql.raw(folder.where!)}) AND chart.game = ${folder.game} ${versionFilter}`;
+			});
 
 		// Keep each statement comfortably below PostgreSQL's expression-depth limits.
 		for (let i = 0; i < predicates.length; i = i + 100) {

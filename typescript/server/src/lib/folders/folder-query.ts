@@ -18,6 +18,12 @@ export async function BuildFolderQuery(folderID: string, db: Kysely<Database>) {
 		throw new Error(`Folder with ID '${folderID}' not found.`);
 	}
 
+	if (folder.where === null) {
+		return {
+			folderQuery: sql`SELECT chart.id FROM chart WHERE false`,
+		};
+	}
+
 	// Parentheses: `folder.where` is spliced before ANDs on chart.game / versions; without
 	// them, `A OR B AND chart.game = …` parses as `A OR (B AND …)` instead of `(A OR B) AND …`.
 	const interpolateWhereRaw = sql.raw(`(${folder.where})`);

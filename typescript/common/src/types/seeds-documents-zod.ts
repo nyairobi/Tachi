@@ -208,7 +208,8 @@ export const SEEDS_FOLDER_DOCUMENT_SCHEMA = z.strictObject({
 	slug: z.string(),
 	title: z.string(),
 	versionFilter: z.array(z.string()).optional(),
-	where: z.string(),
+	where: z.string().optional(),
+	parent: z.string().optional(),
 });
 
 export type SEEDS_FolderDocument = z.infer<typeof SEEDS_FOLDER_DOCUMENT_SCHEMA>;

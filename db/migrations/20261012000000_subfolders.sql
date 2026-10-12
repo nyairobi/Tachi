@@ -1,0 +1,5 @@
+ALTER TABLE folder
+ADD COLUMN parent TEXT;
+
+ALTER TABLE folder
+ALTER COLUMN "where" DROP NOT NULL;
