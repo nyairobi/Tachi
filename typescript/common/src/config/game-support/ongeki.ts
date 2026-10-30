@@ -314,6 +314,7 @@ export const GAME_ONGEKI_CONF = {
 			refresh: ONGEKI_LEVEL,
 			refreshOmni: ONGEKI_LEVEL,
 		}),
+		releaseDate: z.iso.date().optional(),
 	}),
 
 	preferences: z.strictObject({}),
