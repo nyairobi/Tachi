@@ -826,3 +826,62 @@ export async function FindChartsOnPopularity(
 		return r;
 	});
 }
+
+/**
+ * Like FindChartsOnPopularity, but returns the N latest charts for this game.
+ * Release time is determined by data.releaseDate or by the chartID (which is quasi-snowflake).
+ * @see FindChartsOnPopularity
+ */
+export async function FindChartsLatest(
+	game: V3Game,
+	filters?: { chartIDs: Array<string> | undefined; songIDs: Array<string> | undefined },
+	skip = 0,
+	limit = 100,
+): Promise<Array<{ __playcount: integer } & ChartDocument>> {
+	if (filters?.chartIDs?.length === 0) {
+		return [];
+	}
+
+	if (filters?.songIDs?.length === 0) {
+		return [];
+	}
+
+	const chartIdFilter = filters?.chartIDs;
+
+	let q = DB.selectFrom("chart")
+		.innerJoin("song", "song.id", "chart.song_id")
+		.leftJoin("chart_playcount", "chart_playcount.chart_id", "chart.id")
+		.where("chart.game", "=", game)
+		.where(sql<SqlBool>`(chart.data->>'2dxtraSet') IS NULL`);
+
+	if (chartIdFilter !== undefined) {
+		q = q.where("chart.id", "in", chartIdFilter);
+	}
+
+	if (filters?.songIDs) {
+		q = q.where("song.id", "in", filters.songIDs);
+	}
+
+	const rows = await q
+		.select([
+			...SELECT_CHART, // format-bearing comment
+			sql<number>`coalesce(chart_playcount.playcount, 0)::int`.as("playcount"),
+		])
+		.orderBy(sql`substring(${sql.ref("chart.id")} from 2 for 6)`, "desc")
+		.orderBy("song.title", "asc")
+		.offset(skip)
+		.limit(limit)
+		.execute();
+
+	if (rows.length === 0) {
+		return [];
+	}
+
+	return rows.map((row) => {
+		const r = ToChartDocument(row) as { __playcount: integer } & ChartDocument;
+
+		r.__playcount = row.playcount;
+
+		return r;
+	});
+}

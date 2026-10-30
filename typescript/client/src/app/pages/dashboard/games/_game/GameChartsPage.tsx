@@ -1,6 +1,7 @@
 import useSetSubheader from "#components/layout/header/useSetSubheader";
 import DifficultyCell from "#components/tables/cells/DifficultyCell";
 import TitleCell from "#components/tables/cells/TitleCell";
+import SortableTH from "#components/tables/components/SortableTH";
 import TachiTable from "#components/tables/components/TachiTable";
 import { CascadingRatingValue } from "#components/tables/headers/ChartHeader";
 import ApiError from "#components/util/ApiError";
@@ -20,6 +21,7 @@ import {
 	GameToGameGroup,
 	GetGameGroupConfig,
 	type integer,
+	inverseTachiID,
 	type SongDocument,
 } from "tachi-common";
 
@@ -42,12 +44,20 @@ export default function GameChartsPage({ game }: GameProps) {
 }
 
 function SearchSongsTable({ game, search }: { search: string } & GameProps) {
-	const params = new URLSearchParams({ search });
+	const [orderBy, setOrderBy] = useState<"latest" | "popularity">("popularity");
+	const params = new URLSearchParams({});
+
+	if (search !== "") {
+		params.append("search", search);
+	}
+	if (orderBy === "latest") {
+		params.append("sortByLatest", "true");
+	}
 
 	const { data, error } = useApiQuery<{
 		charts: ({ __playcount: integer } & ChartDocument)[];
 		songs: SongDocument[];
-	}>(`/games/${game}/charts${search !== "" ? `?${params.toString()}` : ""}`);
+	}>(`/games/${game}/charts?${params.toString()}`);
 
 	if (error) {
 		return <ApiError error={error} />;
@@ -74,7 +84,10 @@ function SearchSongsTable({ game, search }: { search: string } & GameProps) {
 		<>
 			{search === "" && (
 				<div className="w-100 text-center">
-					<h4>Displaying the most played charts for {FormatGame(game)}</h4>
+					<h4>
+						Displaying {orderBy === "popularity" ? "the most played" : "latest"} charts
+						for {FormatGame(game)}
+					</h4>
 					<Divider />
 				</div>
 			)}
@@ -82,15 +95,84 @@ function SearchSongsTable({ game, search }: { search: string } & GameProps) {
 				dataset={dataset}
 				entryName="Charts"
 				headers={[
-					["Chart", "Chart", (a, b) => CascadingRatingValue(game, a, b)],
-					["Song Title", "Song", StrSOV((x) => x.__related.song.title)],
-					["Playcount", "Playcount", NumericSOV((x) => x.__playcount)],
+					[
+						"Chart",
+						"Chart",
+						(a, b) => CascadingRatingValue(game, a, b),
+						() => (
+							<th>
+								<div className="vstack align-items-center text-nowrap gap-1">
+									<span className="d-none d-xl-block">{"Chart"}</span>
+									<span className="d-block d-xl-none">{"Chart"}</span>
+								</div>
+							</th>
+						),
+					],
+					[
+						"Song Title",
+						"Song",
+						StrSOV((x) => x.__related.song.title),
+						() => (
+							<th>
+								<div className="vstack align-items-center text-nowrap gap-1">
+									<span className="d-none d-xl-block">{"Song Title"}</span>
+									<span className="d-block d-xl-none">{"Song"}</span>
+								</div>
+							</th>
+						),
+					],
+					["", ""],
+					[
+						"Playcount",
+						"Playcount",
+						NumericSOV((x) => x.__playcount),
+						(em) => {
+							em.changeSort = () => {
+								setOrderBy("popularity");
+							};
+							return (
+								<SortableTH
+									{...em}
+									currentSortMode={orderBy}
+									key={`header-${"playcount"}`}
+									name={"Playcount"}
+									oneDirectional
+									reverseSort={false}
+									shortName={"playcount"}
+									sortingName={"popularity"}
+								/>
+							);
+						},
+					],
+					[
+						"Release time",
+						"Release",
+						StrSOV((x) => x.chartID),
+						(em) => {
+							em.changeSort = () => {
+								setOrderBy("latest");
+							};
+							return (
+								<SortableTH
+									{...em}
+									currentSortMode={orderBy}
+									key={`header-${"latest"}`}
+									name={"Added on"}
+									oneDirectional
+									reverseSort={false}
+									shortName={"latest"}
+									sortingName={"latest"}
+								/>
+							);
+						},
+					],
 				]}
 				rowFunction={(d) => (
 					<tr>
 						<DifficultyCell chart={d} game={game} />
-						<TitleCell chart={d} game={game} song={d.__related.song} />
+						<TitleCell chart={d} game={game} song={d.__related.song} wide />
 						<td>{d.__playcount}</td>
+						<td>{inverseTachiID(d.chartID).toLocaleDateString("ja")}</td>
 					</tr>
 				)}
 				searchFunctions={{

@@ -23,6 +23,10 @@ export function tachiID(prefix: string, ts: number = Date.now(), epoch = 0): str
 	return prefix + dtb + rand;
 }
 
+export function inverseTachiID(id: string): Date {
+	return new Date(Number(`0x${id.substring(1, id.length - 8)}`));
+}
+
 export function CreateChartID(ts: number = Date.now()): string {
 	return tachiID("C", ts);
 }

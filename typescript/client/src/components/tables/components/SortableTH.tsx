@@ -9,10 +9,12 @@ export default function SortableTH({
 	currentSortMode,
 	reverseSort,
 	style = {},
+	oneDirectional,
 }: {
 	changeSort: (s: string) => void;
 	currentSortMode: string | null;
 	name: string;
+	oneDirectional?: boolean;
 	reverseSort: boolean;
 	shortName: string;
 	sortingName?: string;
@@ -24,14 +26,16 @@ export default function SortableTH({
 				<span className="d-none d-xl-block">{name}</span>
 				<span className="d-block d-xl-none">{shortName}</span>
 				<span className="d-flex justify-content-center gap-1">
-					<Icon
-						className={
-							currentSortMode === sortingName && reverseSort
-								? "opacity-100"
-								: "opacity-25"
-						}
-						type="arrow-up"
-					/>
+					{oneDirectional !== true && (
+						<Icon
+							className={
+								currentSortMode === sortingName && reverseSort
+									? "opacity-100"
+									: "opacity-25"
+							}
+							type="arrow-up"
+						/>
+					)}
 					<Icon
 						className={
 							currentSortMode === sortingName && !reverseSort

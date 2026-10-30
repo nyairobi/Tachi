@@ -51,7 +51,7 @@ import {
 	GetRelevantSongsAndCharts,
 } from "#utils/db";
 import { EscapeForILIKE, IsString } from "#utils/misc";
-import { FindChartsOnPopularity } from "#utils/queries/charts";
+import { FindChartsLatest, FindChartsOnPopularity } from "#utils/queries/charts";
 import {
 	GetQuestlineById,
 	GetQuestlinesForGame,
@@ -304,11 +304,12 @@ API_V1_ROUTER.add("GET /games/:game/activity", withGame, async ({ input, ctx }) 
 });
 
 /**
- * Searches for charts on this game, or returns the 100 most popular if no search given.
+ * Searches for charts on this game, or returns the 100 most popular charts by default.
  *
  * @param search - The song title to match on.
  * @param noIntelligentOmit - If present, will not perform intelligent chart omissions.
  * @param requesterHasPlayed - If present, only returns charts the requester has a PB on.
+ * @param sortByLatest - If present, sort by latest rather than most popular
  *
  * @name GET /api/v1/games/:game/charts
  */
@@ -344,12 +345,8 @@ API_V1_ROUTER.add("GET /games/:game/charts", withGame, async ({ input, ctx, req 
 		chartIDs = playedCharts.map((e) => e.chart_id);
 	}
 
-	let charts = (await FindChartsOnPopularity(
-		v3Game,
-		{ songIDs, chartIDs },
-		0,
-		100,
-	)) as Array<ChartDocument>;
+	const findFn = input.sortByLatest === undefined ? FindChartsOnPopularity : FindChartsLatest;
+	let charts = (await findFn(v3Game, { songIDs, chartIDs }, 0, 100)) as Array<ChartDocument>;
 
 	const songs = await GetSongsByIDs(charts.map((e) => e.song.id));
 

@@ -1499,6 +1499,7 @@ export const API_V1_SPEC = {
 			search: z.string().optional(),
 			noIntelligentOmit: z.string().optional(),
 			requesterHasPlayed: z.string().optional(),
+			sortByLatest: z.string().optional(),
 		}),
 		output: z.strictObject({
 			charts: docArray<ChartDocument>(),
