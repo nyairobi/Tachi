@@ -1,6 +1,6 @@
 import type { Game } from "tachi-db";
 
-import { SELECT_CHART, ToChartDocument } from "#lib/db-formats/chart";
+import { ChartRow, SELECT_CHART, ToChartDocument } from "#lib/db-formats/chart";
 import { SELECT_SONG_DOCUMENT, ToSongDocument } from "#lib/db-formats/song";
 import { InvalidScoreFailure } from "#lib/score-import/framework/common/converter-failures";
 import DB from "#services/pg/db";
@@ -775,69 +775,34 @@ export async function FindUSCChartsByHashSHA1(hash: string): Promise<Array<Chart
  * Returns the N most popular charts for this game + playtype.
  * Popularity is determined by cached total score rows per chart (`chart_playcount`).
  */
-export async function FindChartsOnPopularity(
+export function FindChartsOnPopularity(
 	game: V3Game,
 	filters?: { chartIDs: Array<string> | undefined; songIDs: Array<string> | undefined },
 	skip = 0,
 	limit = 100,
 ): Promise<Array<{ __playcount: integer } & ChartDocument>> {
-	if (filters?.chartIDs?.length === 0) {
-		return [];
-	}
-
-	if (filters?.songIDs?.length === 0) {
-		return [];
-	}
-
-	const chartIdFilter = filters?.chartIDs;
-
-	let q = DB.selectFrom("chart")
-		.innerJoin("song", "song.id", "chart.song_id")
-		.leftJoin("chart_playcount", "chart_playcount.chart_id", "chart.id")
-		.where("chart.game", "=", game)
-		.where(sql<SqlBool>`(chart.data->>'2dxtraSet') IS NULL`);
-
-	if (chartIdFilter !== undefined) {
-		q = q.where("chart.id", "in", chartIdFilter);
-	}
-
-	if (filters?.songIDs) {
-		q = q.where("song.id", "in", filters.songIDs);
-	}
-
-	const rows = await q
-		.select([
-			...SELECT_CHART, // format-bearing comment
-			sql<number>`coalesce(chart_playcount.playcount, 0)::int`.as("playcount"),
-		])
-		.orderBy(sql`coalesce(chart_playcount.playcount, 0)`, "desc")
-		.offset(skip)
-		.limit(limit)
-		.execute();
-
-	if (rows.length === 0) {
-		return [];
-	}
-
-	return rows.map((row) => {
-		const r = ToChartDocument(row) as { __playcount: integer } & ChartDocument;
-
-		r.__playcount = row.playcount;
-
-		return r;
-	});
+	return FindChartsHelper(game, false, skip, limit, filters);
 }
 
 /**
- * Like FindChartsOnPopularity, but returns the N latest charts for this game.
- * Release time is determined by data.releaseDate or by the chartID (which is quasi-snowflake).
- * @see FindChartsOnPopularity
+ * Returns the N latest charts for this game.
+ * Release time is determined by data.releaseDate (if present) or by the chartID (which is a snowflake-like).
  */
-export async function FindChartsLatest(
+export function FindChartsLatest(
 	game: V3Game,
 	filters?: { chartIDs: Array<string> | undefined; songIDs: Array<string> | undefined },
 	skip = 0,
 	limit = 100,
+): Promise<Array<{ __playcount: integer } & ChartDocument>> {
+	return FindChartsHelper(game, true, skip, limit, filters);
+}
+
+async function FindChartsHelper(
+	game: V3Game,
+	byLatest: boolean,
+	skip: number,
+	limit: number,
+	filters?: { chartIDs: Array<string> | undefined; songIDs: Array<string> | undefined },
 ): Promise<Array<{ __playcount: integer } & ChartDocument>> {
 	if (filters?.chartIDs?.length === 0) {
 		return [];
@@ -863,23 +828,24 @@ export async function FindChartsLatest(
 		q = q.where("song.id", "in", filters.songIDs);
 	}
 
-	let orderByRelease;
-	if ("releaseDate" in GetGameConfig(game).chartData.shape) {
-		orderByRelease = sql`chart.data::jsonb->>'releaseDate' desc`;
+	q = q.select([
+		...SELECT_CHART, // format-bearing comment
+		sql<number>`coalesce(chart_playcount.playcount, 0)::int`.as("playcount"),
+	]);
+
+	if (byLatest === false) {
+		q = q.orderBy(sql`coalesce(chart_playcount.playcount, 0)`, "desc");
 	} else {
-		orderByRelease = sql`substring(${sql.ref("chart.id")} from 2 for 6) desc`;
+		if ("releaseDate" in GetGameConfig(game).chartData.shape) {
+			q = q.orderBy(sql`chart.data::jsonb->>'releaseDate' desc`);
+		} else {
+			q = q.orderBy(sql`substring(${sql.ref("chart.id")} from 2 for 6) desc`);
+		}
+		q = q.orderBy("song.title", "asc");
 	}
 
-	const rows = await q
-		.select([
-			...SELECT_CHART, // format-bearing comment
-			sql<number>`coalesce(chart_playcount.playcount, 0)::int`.as("playcount"),
-		])
-		.orderBy(orderByRelease)
-		.orderBy("song.title", "asc")
-		.offset(skip)
-		.limit(limit)
-		.execute();
+	// @ts-expect-error stupid
+	const rows: ({ playcount: integer } & ChartRow)[] = await q.offset(skip).limit(limit).execute();
 
 	if (rows.length === 0) {
 		return [];
