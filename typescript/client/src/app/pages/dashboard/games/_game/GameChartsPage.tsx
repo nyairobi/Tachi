@@ -19,6 +19,7 @@ import {
 	type FolderDocument,
 	FormatGame,
 	GameToGameGroup,
+	GetGameConfig,
 	GetGameGroupConfig,
 	type integer,
 	inverseTachiID,
@@ -46,6 +47,8 @@ export default function GameChartsPage({ game }: GameProps) {
 function SearchSongsTable({ game, search }: { search: string } & GameProps) {
 	const [orderBy, setOrderBy] = useState<"latest" | "popularity">("popularity");
 	const params = new URLSearchParams({});
+	const gameConfig = GetGameConfig(game);
+	const hasReleaseDate = "releaseDate" in gameConfig.chartData.shape;
 
 	if (search !== "") {
 		params.append("search", search);
@@ -99,80 +102,101 @@ function SearchSongsTable({ game, search }: { search: string } & GameProps) {
 						"Chart",
 						"Chart",
 						(a, b) => CascadingRatingValue(game, a, b),
-						() => (
-							<th>
-								<div className="vstack align-items-center text-nowrap gap-1">
-									<span className="d-none d-xl-block">{"Chart"}</span>
-									<span className="d-block d-xl-none">{"Chart"}</span>
-								</div>
-							</th>
+						(thProps) => (
+							<SortableTH
+								{...thProps}
+								changeSort={() => {}}
+								hideArrowDown
+								hideArrowUp
+								key={`header-Chart`}
+								name={"Chart"}
+								shortName={"Chart"}
+							/>
 						),
 					],
 					[
 						"Song Title",
 						"Song",
 						StrSOV((x) => x.__related.song.title),
-						() => (
-							<th>
-								<div className="vstack align-items-center text-nowrap gap-1">
-									<span className="d-none d-xl-block">{"Song Title"}</span>
-									<span className="d-block d-xl-none">{"Song"}</span>
-								</div>
-							</th>
+						(thProps) => (
+							<SortableTH
+								{...thProps}
+								changeSort={() => {}}
+								hideArrowDown
+								hideArrowUp
+								key={`header-Song Title`}
+								name={"Song Title"}
+								shortName={"Song"}
+							/>
 						),
 					],
-					["", ""],
 					[
 						"Playcount",
 						"Playcount",
 						NumericSOV((x) => x.__playcount),
-						(em) => {
-							em.changeSort = () => {
-								setOrderBy("popularity");
-							};
-							return (
-								<SortableTH
-									{...em}
-									currentSortMode={orderBy}
-									key={`header-${"playcount"}`}
-									name={"Playcount"}
-									oneDirectional
-									reverseSort={false}
-									shortName={"playcount"}
-									sortingName={"popularity"}
-								/>
-							);
-						},
+						(thProps) => (
+							<SortableTH
+								{...thProps}
+								changeSort={() => setOrderBy("popularity")}
+								currentSortMode={orderBy}
+								hideArrowUp
+								key={`header-${"playcount"}`}
+								name={"Playcount"}
+								reverseSort={false}
+								shortName={"Playcount"}
+								sortingName={"popularity"}
+							/>
+						),
 					],
 					[
 						"Release time",
 						"Release",
 						StrSOV((x) => x.chartID),
-						(em) => {
-							em.changeSort = () => {
-								setOrderBy("latest");
-							};
-							return (
-								<SortableTH
-									{...em}
-									currentSortMode={orderBy}
-									key={`header-${"latest"}`}
-									name={"Added on"}
-									oneDirectional
-									reverseSort={false}
-									shortName={"latest"}
-									sortingName={"latest"}
-								/>
-							);
-						},
+						(thProps) => (
+							<SortableTH
+								{...thProps}
+								changeSort={() => setOrderBy("latest")}
+								currentSortMode={orderBy}
+								hideArrowUp
+								key={`header-${"latest"}`}
+								name={hasReleaseDate ? "Release date" : "Added on"}
+								reverseSort={false}
+								shortName={"Added on"}
+								sortingName={"latest"}
+							/>
+						),
 					],
 				]}
 				rowFunction={(d) => (
 					<tr>
 						<DifficultyCell chart={d} game={game} />
 						<TitleCell chart={d} game={game} song={d.__related.song} wide />
-						<td>{d.__playcount}</td>
-						<td>{inverseTachiID(d.chartID).toLocaleDateString("ja")}</td>
+						<td
+							style={{
+								boxSizing: "border-box",
+								maxWidth: `100px`,
+								minWidth: 0,
+								overflow: "hidden",
+								textAlign: "center",
+								width: `100px`,
+							}}
+						>
+							{d.__playcount}
+						</td>
+						<td
+							style={{
+								boxSizing: "border-box",
+								maxWidth: `150px`,
+								minWidth: 0,
+								overflow: "hidden",
+								textAlign: "center",
+								width: `150px`,
+							}}
+						>
+							{hasReleaseDate
+								? (d.data as { releaseDate: string }).releaseDate
+								: (inverseTachiID(d.chartID)?.toLocaleDateString("en-CA") ?? "—")}
+						</td>
 					</tr>
 				)}
 				searchFunctions={{

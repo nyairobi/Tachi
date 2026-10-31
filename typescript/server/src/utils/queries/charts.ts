@@ -11,6 +11,7 @@ import {
 	type GameGroup,
 	type GamesForGroup,
 	GameToGameGroup,
+	GetGameConfig,
 	type integer,
 	type SongDocument,
 	type V3Game,
@@ -862,12 +863,19 @@ export async function FindChartsLatest(
 		q = q.where("song.id", "in", filters.songIDs);
 	}
 
+	let orderByRelease;
+	if ("releaseDate" in GetGameConfig(game).chartData.shape) {
+		orderByRelease = sql`chart.data::jsonb->>'releaseDate' desc`;
+	} else {
+		orderByRelease = sql`substring(${sql.ref("chart.id")} from 2 for 6) desc`;
+	}
+
 	const rows = await q
 		.select([
 			...SELECT_CHART, // format-bearing comment
 			sql<number>`coalesce(chart_playcount.playcount, 0)::int`.as("playcount"),
 		])
-		.orderBy(sql`substring(${sql.ref("chart.id")} from 2 for 6)`, "desc")
+		.orderBy(orderByRelease)
 		.orderBy("song.title", "asc")
 		.offset(skip)
 		.limit(limit)

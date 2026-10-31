@@ -1,5 +1,5 @@
 import Icon from "#components/util/Icon";
-import React, { type HTMLAttributes } from "react";
+import { type HTMLAttributes } from "react";
 
 export default function SortableTH({
 	name,
@@ -9,12 +9,14 @@ export default function SortableTH({
 	currentSortMode,
 	reverseSort,
 	style = {},
-	oneDirectional,
+	hideArrowUp,
+	hideArrowDown,
 }: {
 	changeSort: (s: string) => void;
 	currentSortMode: string | null;
+	hideArrowDown?: boolean;
+	hideArrowUp?: boolean;
 	name: string;
-	oneDirectional?: boolean;
 	reverseSort: boolean;
 	shortName: string;
 	sortingName?: string;
@@ -26,7 +28,7 @@ export default function SortableTH({
 				<span className="d-none d-xl-block">{name}</span>
 				<span className="d-block d-xl-none">{shortName}</span>
 				<span className="d-flex justify-content-center gap-1">
-					{oneDirectional !== true && (
+					{hideArrowUp !== true && (
 						<Icon
 							className={
 								currentSortMode === sortingName && reverseSort
@@ -36,14 +38,16 @@ export default function SortableTH({
 							type="arrow-up"
 						/>
 					)}
-					<Icon
-						className={
-							currentSortMode === sortingName && !reverseSort
-								? "opacity-100"
-								: "opacity-25"
-						}
-						type="arrow-down"
-					/>
+					{hideArrowDown !== true && (
+						<Icon
+							className={
+								currentSortMode === sortingName && !reverseSort
+									? "opacity-100"
+									: "opacity-25"
+							}
+							type="arrow-down"
+						/>
+					)}
 				</span>
 			</div>
 		</th>

@@ -23,8 +23,14 @@ export function tachiID(prefix: string, ts: number = Date.now(), epoch = 0): str
 	return prefix + dtb + rand;
 }
 
-export function inverseTachiID(id: string): Date {
-	return new Date(Number(`0x${id.substring(1, id.length - 8)}`));
+export function inverseTachiID(id: string): Date | null {
+	const ts = id.substring(1, id.length - 8);
+	if (ts.startsWith("19d35")) {
+		// v3 migration timestamp
+		return null;
+	} else {
+		return new Date(Number(`0x${id.substring(1, id.length - 8)}`));
+	}
 }
 
 export function CreateChartID(ts: number = Date.now()): string {
