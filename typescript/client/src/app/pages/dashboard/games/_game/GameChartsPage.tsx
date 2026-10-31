@@ -195,7 +195,9 @@ function SearchSongsTable({ game, search }: { search: string } & GameProps) {
 						>
 							{hasReleaseDate
 								? (d.data as { releaseDate: string }).releaseDate
-								: (inverseTachiID(d.chartID)?.toLocaleDateString("en-CA") ?? "—")}
+								: (inverseTachiID(d.chartID)?.toLocaleDateString("en-CA", {
+										timeZone: "UTC",
+									}) ?? "—")}
 						</td>
 					</tr>
 				)}
