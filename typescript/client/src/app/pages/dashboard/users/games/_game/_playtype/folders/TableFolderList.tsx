@@ -118,9 +118,8 @@ export default function TableFolderList({
 
 								onFolderRowNavigate?.();
 							}}
-							// TEMP
 							style={
-								data.folder.slug.includes("p") ? { paddingLeft: "30px" } : undefined
+								data.folder.parent ? { paddingLeft: "30px" } : undefined
 							}
 							to={`/u/${reqUser.username}/games/${game}/folders/${data.folder.slug}`}
 						>

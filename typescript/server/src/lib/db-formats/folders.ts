@@ -13,6 +13,7 @@ export const SELECT_FOLDER = [
 	"folder.where",
 	"folder.search_terms",
 	"folder.version_filter",
+	"folder.parent"
 ] as const;
 
 export function ToFolderDocument(
@@ -26,6 +27,7 @@ export function ToFolderDocument(
 		searchTerms: row.search_terms ?? [],
 		title: row.title,
 		versionFilter: row.version_filter ?? undefined,
+		parent: row.parent ?? undefined
 	};
 }
 
