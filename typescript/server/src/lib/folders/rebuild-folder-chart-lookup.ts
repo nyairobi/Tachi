@@ -1,7 +1,6 @@
-import type { Database, NewFolderChartLookup } from "tachi-db";
-
 /* eslint-disable no-await-in-loop */
-import { type Kysely } from "kysely";
+import type { Kysely } from "kysely";
+import type { Database, NewFolderChartLookup } from "tachi-db";
 
 import { computeFolderChartIdsFromFolderSql } from "./folder-query";
 
@@ -43,39 +42,27 @@ export function rebuildFolderChartLookup(
 
 		await txn.deleteFrom("folder_chart_lookup").execute();
 
-		const folderRows = await txn
-			.selectFrom("folder")
-			.select(["folder.id", "folder.parent"])
-			.execute();
+		const folderRows = await txn.selectFrom("folder").select("folder.id").execute();
+		const folderIds = folderRows.map((r) => r.id);
 
 		let rowCount = 0;
 
-		for (const folderRow of folderRows) {
-			const chartIds = await computeFolderChartIdsFromFolderSql(folderRow.id, txn);
+		for (const fid of folderIds) {
+			const chartIds = await computeFolderChartIdsFromFolderSql(fid, txn);
 
 			for (let i = 0; i < chartIds.length; i = i + INSERT_CHUNK) {
 				const chunk = chartIds.slice(i, i + INSERT_CHUNK);
 				const rows: Array<NewFolderChartLookup> = chunk.map((chart_id) => ({
-					folder_id: folderRow.id,
+					folder_id: fid,
 					chart_id,
 				}));
-
-				const parent = folderRow.parent;
-				if (parent !== null) {
-					rows.push(
-						...chunk.map((chart_id) => ({
-							folder_id: parent,
-							chart_id,
-						})),
-					);
-				}
 
 				await txn.insertInto("folder_chart_lookup").values(rows).execute();
 				rowCount = rowCount + rows.length;
 			}
 		}
 
-		return { folderCount: folderRows.length, rowCount };
+		return { folderCount: folderIds.length, rowCount };
 	};
 
 	if (db.isTransaction) {

@@ -208,7 +208,7 @@ export const SEEDS_FOLDER_DOCUMENT_SCHEMA = z.strictObject({
 	slug: z.string(),
 	title: z.string(),
 	versionFilter: z.array(z.string()).optional(),
-	where: z.string().optional(),
+	where: z.string(),
 	parent: z.string().optional(),
 });
 

@@ -21,7 +21,7 @@ export default interface FolderTable {
 
   slug: ColumnType<string, string, string>;
 
-  where: ColumnType<string | null, string | null, string | null>;
+  where: ColumnType<string, string, string>;
 
   version_filter: ColumnType<string[] | null, string[] | null, string[] | null>;
 

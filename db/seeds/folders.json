@@ -51994,7 +51994,8 @@
 		"title": "Level 17 (NABLA)",
 		"versionFilter": [
 			"nabla"
-		]
+		],
+		"where": "chart.level_num >= 17 AND chart.level_num < 18"
 	},
 	{
 		"game": "sdvx",
@@ -52112,7 +52113,8 @@
 		"title": "Level 18 (NABLA)",
 		"versionFilter": [
 			"nabla"
-		]
+		],
+		"where": "chart.level_num >= 18 AND chart.level_num < 19"
 	},
 	{
 		"game": "sdvx",
@@ -52342,7 +52344,8 @@
 		"title": "Level 19 (NABLA)",
 		"versionFilter": [
 			"nabla"
-		]
+		],
+		"where": "chart.level_num >= 19 AND chart.level_num < 20"
 	},
 	{
 		"game": "sdvx",
@@ -52653,7 +52656,8 @@
 		"title": "Level 20 (NABLA)",
 		"versionFilter": [
 			"nabla"
-		]
+		],
+		"where": "chart.level_num >= 20 AND chart.level_num < 21"
 	},
 	{
 		"game": "sdvx",

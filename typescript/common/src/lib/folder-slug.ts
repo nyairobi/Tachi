@@ -12,7 +12,7 @@ export type SeedFolderRow = {
 	slug?: string;
 	title: string;
 	versionFilter?: Array<string>;
-	where?: string;
+	where: string;
 };
 
 const CHART_LEVEL_EQ_RE = /^chart\.level = '([^']+)'$/u;
