@@ -5596,7 +5596,7 @@
 	},
 	{
 		"altTitles": [],
-		"artist": "Junky",
+		"artist": "Junky feat. 乙姫(CV:浅川悠)",
 		"data": {
 			"duration": 139.071,
 			"genre": "maimai"
@@ -7843,7 +7843,7 @@
 	},
 	{
 		"altTitles": [],
-		"artist": "箱部なる(CV:M・A・O)",
+		"artist": "箱部 なる(CV:M・A・O)",
 		"data": {
 			"duration": 144,
 			"genre": "オンゲキ＆CHUNITHM"
@@ -7855,7 +7855,7 @@
 	},
 	{
 		"altTitles": [],
-		"artist": "小仏凪(CV:佐倉薫)",
+		"artist": "小仏 凪(CV:佐倉薫)",
 		"data": {
 			"duration": 118.5,
 			"genre": "オンゲキ＆CHUNITHM"
@@ -7869,7 +7869,7 @@
 	},
 	{
 		"altTitles": [],
-		"artist": "月鈴那知(CV:今村彩夏)",
+		"artist": "月鈴 那知(CV:今村彩夏)",
 		"data": {
 			"duration": 148.044,
 			"genre": "オンゲキ＆CHUNITHM"
@@ -10474,7 +10474,7 @@
 	},
 	{
 		"altTitles": [],
-		"artist": "Giga / 鏡音リン・レン / Vivid BAD SQUAD「プロジェクトセカイ カラフルステージ！ feat. 初音ミク」",
+		"artist": "Giga / Vivid BAD SQUAD × 鏡音リン・レン「プロジェクトセカイ カラフルステージ！ feat. 初音ミク」",
 		"data": {
 			"duration": 98.625,
 			"genre": "niconico＆ボーカロイド"
@@ -10742,7 +10742,7 @@
 	},
 	{
 		"altTitles": [],
-		"artist": "ササノマリイ / 初音ミク / 25時、ナイトコードで。「プロジェクトセカイ カラフルステージ！ feat. 初音ミク」",
+		"artist": "ササノマリイ / 25時、ナイトコードで。 × 初音ミク「プロジェクトセカイ カラフルステージ！ feat. 初音ミク」",
 		"data": {
 			"duration": 107.5,
 			"genre": "niconico＆ボーカロイド"
@@ -12352,7 +12352,7 @@
 	},
 	{
 		"altTitles": [],
-		"artist": "ピノキオピー / 初音ミク / ワンダーランズ×ショウタイム「プロジェクトセカイ カラフルステージ！ feat. 初音ミク」",
+		"artist": "ピノキオピー / ワンダーランズ×ショウタイム × 初音ミク「プロジェクトセカイ カラフルステージ！ feat. 初音ミク」",
 		"data": {
 			"duration": 122.609,
 			"genre": "niconico＆ボーカロイド"
@@ -12770,7 +12770,7 @@
 	},
 	{
 		"altTitles": [],
-		"artist": "Mitchie M / 初音ミク / MORE MORE JUMP！「プロジェクトセカイ カラフルステージ！ feat. 初音ミク」",
+		"artist": "Mitchie M / MORE MORE JUMP！ × 初音ミク「プロジェクトセカイ カラフルステージ！ feat. 初音ミク」",
 		"data": {
 			"duration": 107.727,
 			"genre": "niconico＆ボーカロイド"
@@ -12785,7 +12785,7 @@
 	},
 	{
 		"altTitles": [],
-		"artist": "DECO*27 / 初音ミク / Leo/need「プロジェクトセカイ カラフルステージ！ feat. 初音ミク」",
+		"artist": "DECO*27 / Leo/need × 初音ミク「プロジェクトセカイ カラフルステージ！ feat. 初音ミク」",
 		"data": {
 			"duration": 115.855,
 			"genre": "niconico＆ボーカロイド"
@@ -16325,7 +16325,7 @@
 	},
 	{
 		"altTitles": [],
-		"artist": "八王子P / 初音ミク / Vivid BAD SQUAD「プロジェクトセカイ カラフルステージ！ feat. 初音ミク」",
+		"artist": "八王子P / Vivid BAD SQUAD × 初音ミク「プロジェクトセカイ カラフルステージ！ feat. 初音ミク」",
 		"data": {
 			"duration": 142.286,
 			"genre": "niconico＆ボーカロイド"
@@ -16337,7 +16337,7 @@
 	},
 	{
 		"altTitles": [],
-		"artist": "とあ / MEIKO / 25時、ナイトコードで。「プロジェクトセカイ カラフルステージ！ feat. 初音ミク」",
+		"artist": "とあ / 25時、ナイトコードで。 × MEIKO「プロジェクトセカイ カラフルステージ！ feat. 初音ミク」",
 		"data": {
 			"duration": 134.737,
 			"genre": "niconico＆ボーカロイド"
@@ -16351,7 +16351,7 @@
 	},
 	{
 		"altTitles": [],
-		"artist": "ワンダフル☆オポチュニティ！ / 初音ミク / ワンダーランズ×ショウタイム「プロジェクトセカイ カラフルステージ！ feat. 初音ミク」",
+		"artist": "ワンダフル☆オポチュニティ！ / ワンダーランズ×ショウタイム × 初音ミク「プロジェクトセカイ カラフルステージ！ feat. 初音ミク」",
 		"data": {
 			"duration": 125,
 			"genre": "niconico＆ボーカロイド"
@@ -22457,5 +22457,453 @@
 			"ai ae"
 		],
 		"title": "AiAe"
+	},
+	{
+		"altTitles": [],
+		"artist": "大漠波新 feat.ヲタみん",
+		"data": {
+			"duration": 153.6,
+			"genre": "maimai"
+		},
+		"id": "S1a111d73d59dbdeef35",
+		"legacySongID": 1641,
+		"searchTerms": [
+			"oru masuta",
+			"all master"
+		],
+		"title": "オールマスター"
+	},
+	{
+		"altTitles": [],
+		"artist": "umigame",
+		"data": {
+			"duration": 150.462,
+			"genre": "maimai"
+		},
+		"id": "S1a111d73d74507988b7",
+		"legacySongID": 1642,
+		"searchTerms": [],
+		"title": "STRAY"
+	},
+	{
+		"altTitles": [],
+		"artist": "iDEN LiLY feat.X-Fenriey",
+		"data": {
+			"duration": 165.474,
+			"genre": "maimai"
+		},
+		"id": "S1a111d73d914dbeaa3f",
+		"legacySongID": 1643,
+		"searchTerms": [
+			"kuronoidea"
+		],
+		"title": "クロノイデア"
+	},
+	{
+		"altTitles": [],
+		"artist": "ryhki",
+		"data": {
+			"duration": 147.037,
+			"genre": "maimai"
+		},
+		"id": "S1a111d73dac42e2745a",
+		"legacySongID": 1644,
+		"searchTerms": [],
+		"title": "TAKE CONTROL"
+	},
+	{
+		"altTitles": [],
+		"artist": "KARUT",
+		"data": {
+			"duration": 133.793,
+			"genre": "maimai"
+		},
+		"id": "S1a111d73dc8335bcc61",
+		"legacySongID": 1645,
+		"searchTerms": [],
+		"title": "HyperdrivE"
+	},
+	{
+		"altTitles": [],
+		"artist": "polysha",
+		"data": {
+			"duration": 140.432,
+			"genre": "maimai"
+		},
+		"id": "S1a111d73de3195d1e26",
+		"legacySongID": 1646,
+		"searchTerms": [],
+		"title": "Paradoxical Empress"
+	},
+	{
+		"altTitles": [],
+		"artist": "Ashrount",
+		"data": {
+			"duration": 145.796,
+			"genre": "maimai"
+		},
+		"id": "S1a111d73dff2568175e",
+		"legacySongID": 1647,
+		"searchTerms": [
+			"rondo"
+		],
+		"title": "RONDØ"
+	},
+	{
+		"altTitles": [],
+		"artist": "曲：篠崎あやと、橘亮祐／歌：結城 莉玖(CV：朝日奈 丸佳)、東雲 つむぎ(CV：和泉 風花)",
+		"data": {
+			"duration": 145,
+			"genre": "オンゲキ＆CHUNITHM"
+		},
+		"id": "S1a111d73eed9a618c21",
+		"legacySongID": 1653,
+		"searchTerms": [
+			"kimi wa miteita ne"
+		],
+		"title": "キミは“見ていたね”？"
+	},
+	{
+		"altTitles": [],
+		"artist": "MURASAKI feat.かたたかんな",
+		"data": {
+			"duration": 144.324,
+			"genre": "ゲーム＆バラエティ"
+		},
+		"id": "S1a111d740b8c73da665",
+		"legacySongID": 1657,
+		"searchTerms": [
+			"kiki kaitai"
+		],
+		"title": "奇々解体"
+	},
+	{
+		"altTitles": [],
+		"artist": "柊マグネタイト",
+		"data": {
+			"duration": 139.111,
+			"genre": "niconico＆ボーカロイド"
+		},
+		"id": "S1a111d740d44c60224f",
+		"legacySongID": 1658,
+		"searchTerms": [
+			"zako"
+		],
+		"title": "雑魚"
+	},
+	{
+		"altTitles": [],
+		"artist": "吉本おじさん",
+		"data": {
+			"duration": 133.067,
+			"genre": "niconico＆ボーカロイド"
+		},
+		"id": "S1a111d740f10a8aa072",
+		"legacySongID": 1659,
+		"searchTerms": [
+			"ohenji mada kana ojisan koubun",
+			"ohenji mada kana ojisan kobun"
+		],
+		"title": "お返事まだカナ？おじさん構文！"
+	},
+	{
+		"altTitles": [],
+		"artist": "DÉ DÉ MOUSE & KAJI",
+		"data": {
+			"duration": 166.333,
+			"genre": "ゲーム＆バラエティ"
+		},
+		"id": "S1a111d7410bcc4e52bc",
+		"legacySongID": 1660,
+		"searchTerms": [],
+		"title": "ZEUS"
+	},
+	{
+		"altTitles": [],
+		"artist": "Mili",
+		"data": {
+			"duration": 151.555,
+			"genre": "ゲーム＆バラエティ"
+		},
+		"id": "S1a111d74126c4ff809e",
+		"legacySongID": 1661,
+		"searchTerms": [],
+		"title": "Nine Point Eight"
+	},
+	{
+		"altTitles": [],
+		"artist": "M2U / Arranger : M2U & NICODE / Vocal : Guriri & Lucy",
+		"data": {
+			"duration": 156,
+			"genre": "ゲーム＆バラエティ"
+		},
+		"id": "S1a111d741415b957b9d",
+		"legacySongID": 1662,
+		"searchTerms": [],
+		"title": "Myosotis"
+	},
+	{
+		"altTitles": [],
+		"artist": "xi",
+		"data": {
+			"duration": 119.019,
+			"genre": "ゲーム＆バラエティ"
+		},
+		"id": "S1a111d7415d575e710f",
+		"legacySongID": 1663,
+		"searchTerms": [],
+		"title": "ANiMA"
+	},
+	{
+		"altTitles": [],
+		"artist": "Mitsukiyo「ブルーアーカイブ -Blue Archive-」",
+		"data": {
+			"duration": 117.553,
+			"genre": "ゲーム＆バラエティ"
+		},
+		"id": "S1a111d74179a3a1c562",
+		"legacySongID": 1664,
+		"searchTerms": [
+			"operation dotabata"
+		],
+		"title": "Operation☆DOTABATA!"
+	},
+	{
+		"altTitles": [],
+		"artist": "Nor「ブルーアーカイブ -Blue Archive-」",
+		"data": {
+			"duration": 142.667,
+			"genre": "ゲーム＆バラエティ"
+		},
+		"id": "S1a111d741946d61400d",
+		"legacySongID": 1665,
+		"searchTerms": [],
+		"title": "RE Aoharu"
+	},
+	{
+		"altTitles": [],
+		"artist": "Nor「ブルーアーカイブ -Blue Archive-」",
+		"data": {
+			"duration": 128.824,
+			"genre": "ゲーム＆バラエティ"
+		},
+		"id": "S1a111d741b0917abd5d",
+		"legacySongID": 1666,
+		"searchTerms": [],
+		"title": "Usagi Flap"
+	},
+	{
+		"altTitles": [],
+		"artist": "HIMEHINA",
+		"data": {
+			"duration": 122.432,
+			"genre": "POPS＆アニメ"
+		},
+		"id": "S1a111d741cbde855b71",
+		"legacySongID": 1667,
+		"searchTerms": [
+			"kiss kitsune",
+			"kisu kitsune"
+		],
+		"title": "キスキツネ"
+	},
+	{
+		"altTitles": [],
+		"artist": "HIMEHINA",
+		"data": {
+			"duration": 109.726,
+			"genre": "POPS＆アニメ"
+		},
+		"id": "S1a111d741e6204dc9a6",
+		"legacySongID": 1668,
+		"searchTerms": [],
+		"title": "WWW"
+	},
+	{
+		"altTitles": [],
+		"artist": "HIMEHINA",
+		"data": {
+			"duration": 177.831,
+			"genre": "POPS＆アニメ"
+		},
+		"id": "S1a111d74202ead70bf2",
+		"legacySongID": 1669,
+		"searchTerms": [
+			"utakata yo ikanaide"
+		],
+		"title": "うたかたよいかないで"
+	},
+	{
+		"altTitles": [],
+		"artist": "ぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬぬ",
+		"data": {
+			"duration": 168.571,
+			"genre": "niconico＆ボーカロイド"
+		},
+		"id": "S1a17458935d8df4de18",
+		"legacySongID": 1672,
+		"searchTerms": [
+			"mi mu ka wa naisu torai",
+			"mimukawa nice try"
+		],
+		"title": "み　む　かｩ　わ　ナ　イ　ス　ト　ラ　イ"
+	},
+	{
+		"altTitles": [],
+		"artist": "なきそ",
+		"data": {
+			"duration": 118.667,
+			"genre": "niconico＆ボーカロイド"
+		},
+		"id": "S1a174589450b0f9395e",
+		"legacySongID": 1673,
+		"searchTerms": [
+			"bake no hana"
+		],
+		"title": "化けの花"
+	},
+	{
+		"altTitles": [],
+		"artist": "3markets[ ]",
+		"data": {
+			"duration": 164.4,
+			"genre": "POPS＆アニメ"
+		},
+		"id": "S1a174589572e43156d6",
+		"legacySongID": 1674,
+		"searchTerms": [],
+		"title": "INTJINTPENTJENTPINFJENFJINFPENFPISTJISFJESTJESFJESTPISTPISFPESFP"
+	},
+	{
+		"altTitles": [],
+		"artist": "Yunosuke / CircusP",
+		"data": {
+			"duration": 145.286,
+			"genre": "niconico＆ボーカロイド"
+		},
+		"id": "S1a1745899ebb98cd691",
+		"legacySongID": 1683,
+		"searchTerms": [],
+		"title": "Intergalactic Bound"
+	},
+	{
+		"altTitles": [],
+		"artist": "TAK",
+		"data": {
+			"duration": 155,
+			"genre": "niconico＆ボーカロイド"
+		},
+		"id": "S1a1745899fd96f1210c",
+		"legacySongID": 1684,
+		"searchTerms": [],
+		"title": "LEMON MELON COOKIE"
+	},
+	{
+		"altTitles": [],
+		"artist": "Sound Souler",
+		"data": {
+			"duration": 161.077,
+			"genre": "ゲーム＆バラエティ"
+		},
+		"id": "S1a174589a1332abb058",
+		"legacySongID": 1685,
+		"searchTerms": [],
+		"title": "3rd Avenue"
+	},
+	{
+		"altTitles": [],
+		"artist": "Camellia ft. Petra Gurin「In Falsus」",
+		"data": {
+			"duration": 143.586,
+			"genre": "ゲーム＆バラエティ"
+		},
+		"id": "S1a174589b58be44c662",
+		"legacySongID": 1702,
+		"searchTerms": [],
+		"title": "Cryogenic"
+	},
+	{
+		"altTitles": [],
+		"artist": "森羅万象",
+		"data": {
+			"duration": 164.962,
+			"genre": "東方Project"
+		},
+		"id": "S1a180f157cd4e4f5b7e",
+		"legacySongID": 1703,
+		"searchTerms": [
+			"junjou armeria",
+			"junjou arumeria"
+		],
+		"title": "純情アルメリア"
+	},
+	{
+		"altTitles": [],
+		"artist": "森羅万象",
+		"data": {
+			"duration": 159.892,
+			"genre": "東方Project"
+		},
+		"id": "S1a180f157da3cba8dcd",
+		"legacySongID": 1704,
+		"searchTerms": [
+			"unmei senjou no aria"
+		],
+		"title": "運命線上のアリア"
+	},
+	{
+		"altTitles": [],
+		"artist": "森羅万象",
+		"data": {
+			"duration": 151.16,
+			"genre": "東方Project"
+		},
+		"id": "S1a180f157e7e2507add",
+		"legacySongID": 1705,
+		"searchTerms": [
+			"dendera party night"
+		],
+		"title": "デンデラパーティーナイト"
+	},
+	{
+		"altTitles": [],
+		"artist": "Laur",
+		"data": {
+			"duration": 135.273,
+			"genre": "東方Project"
+		},
+		"id": "S1a180f157f39b0cbdd0",
+		"legacySongID": 1706,
+		"searchTerms": [],
+		"title": "Absolute Queen"
+	},
+	{
+		"altTitles": [],
+		"artist": "igel",
+		"data": {
+			"duration": 152.456,
+			"genre": "maimai"
+		},
+		"id": "S1a18113b7b67a3ff6dc",
+		"legacySongID": 1707,
+		"searchTerms": [
+			"mahou shikake no fantasia",
+			"enchanted fantasia"
+		],
+		"title": "魔法仕掛けのファンタジア"
+	},
+	{
+		"altTitles": [],
+		"artist": "Alicemetix",
+		"data": {
+			"duration": 138.305,
+			"genre": "maimai"
+		},
+		"id": "S1a181210b8f2769a215",
+		"legacySongID": 1708,
+		"searchTerms": [
+			"overclock"
+		],
+		"title": "OV3RCLOCK"
 	}
 ]
