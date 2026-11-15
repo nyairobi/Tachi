@@ -21,7 +21,7 @@ const command = new Command()
 const options = command.opts();
 
 const CURRENT_VERSION = "refresh2";
-const CURRENT_OMNIMIX = "refreshOmni2";
+const CURRENT_OMNIMIX = "refresh2Omni";
 const DRY_RUN = false;
 
 interface Input {
@@ -35,6 +35,7 @@ interface InputSong {
 	artist: string;
 	genre: string;
 	releaseVersion: string;
+	releaseDate: string;
 	isOmnimix: boolean;
 	isReMaster: boolean;
 	charts: InputChart[];
@@ -127,7 +128,6 @@ const main = async () => {
 			if (song === undefined) {
 				song = {
 					id: CreateSongID(),
-					legacySongID: songs[songs.length - 1]!.legacySongID + 1,
 					altTitles: [],
 					searchTerms: [],
 					artist: inputSong.artist,
@@ -187,6 +187,7 @@ const main = async () => {
 							refresh: null,
 							refreshOmni: null,
 						},
+						releaseDate: inputSong.releaseDate
 					},
 					difficulty: inputChart.difficulty,
 					isPrimary: true,

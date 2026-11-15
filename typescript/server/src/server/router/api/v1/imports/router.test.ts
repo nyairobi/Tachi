@@ -39,7 +39,6 @@ async function seedFakeImportFixture() {
 	await DB.insertInto("song")
 		.values({
 			id: Testing511Song.id,
-			legacy_id: 1,
 			game_group: "iidx",
 			title: Testing511Song.title,
 			artist: Testing511Song.artist,
@@ -141,6 +140,7 @@ describe("POST /api/v1/imports/:importID/revert", () => {
 		const score = await DB.selectFrom("score")
 			.select("id")
 			.where("id", "=", FakeImport.scoreIDs[0])
+			.limit(1)
 			.executeTakeFirst();
 
 		expect(score).toBeUndefined();

@@ -34,7 +34,6 @@ async function seedIidxSongAndChart() {
 	await DB.insertInto("song")
 		.values({
 			id: SONG_PG_ID,
-			legacy_id: 1,
 			game_group: "iidx",
 			title: "5.1.1.",
 			artist: "dj nagureo",
@@ -206,6 +205,7 @@ describe("OrphanScore (Postgres)", () => {
 		const row = await DB.selectFrom("orphan_score")
 			.selectAll()
 			.where("orphan_id", "=", res.orphanID)
+			.limit(1)
 			.executeTakeFirst();
 
 		expect(row).toMatchObject({
@@ -254,6 +254,7 @@ describe("OrphanScore (Postgres)", () => {
 		const n = await DB.selectFrom("orphan_score")
 			.select((eb) => eb.fn.countAll<number>().as("c"))
 			.where("user_id", "=", userId)
+			.limit(1)
 			.executeTakeFirstOrThrow();
 
 		expect(Number(n.c)).toBe(1);
@@ -290,6 +291,7 @@ describe("ReprocessOrphan (Postgres)", () => {
 		const row = await DB.selectFrom("orphan_score")
 			.select("orphan_id")
 			.where("orphan_id", "=", "opg-1")
+			.limit(1)
 			.executeTakeFirst();
 		expect(row).toBeUndefined();
 	});
@@ -326,6 +328,7 @@ describe("ReprocessOrphan (Postgres)", () => {
 		const row = await DB.selectFrom("orphan_score")
 			.select("orphan_id")
 			.where("orphan_id", "=", orphanDoc.orphanID)
+			.limit(1)
 			.executeTakeFirst();
 		expect(row).toBeUndefined();
 	});
@@ -362,6 +365,7 @@ describe("ReprocessOrphan (Postgres)", () => {
 		const row = await DB.selectFrom("orphan_score")
 			.select("orphan_id")
 			.where("orphan_id", "=", orphanDoc.orphanID)
+			.limit(1)
 			.executeTakeFirst();
 		expect(row?.orphan_id).toBe(orphanDoc.orphanID);
 	});

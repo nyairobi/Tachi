@@ -130,21 +130,6 @@ function whereUserIdOnQuestSub(userID: UserIDFilter | undefined) {
 	return (eb: any) => eb("quest_sub.user_id", "in", ids);
 }
 
-/**
- * Next numeric `song.legacy_id` for BMS/PMS - `max(existing) + 1`, or `1` if none.
- * Replaces Mongo `counters` `*-song-id` documents.
- *
- * This shit sucks and should be dropped asap: TODO(zk)
- */
-export async function GetNextBmsPmsSongLegacyId(game: "bms" | "pms"): Promise<integer> {
-	const row = await DB.selectFrom("song")
-		.select(sql<number>`coalesce(max(song.legacy_id), 0)::int`.as("m"))
-		.where("game_group", "=", game)
-		.executeTakeFirst();
-
-	return (row?.m ?? 0) + 1;
-}
-
 export async function GetRelevantSongsAndCharts(scores: Array<PBScoreDocument | ScoreDocument>) {
 	const songIDs = [...new Set(scores.map((e) => e.songID))];
 	const chartIDs = [...new Set(scores.map((e) => e.chartID))];
@@ -159,6 +144,7 @@ export async function GetChartForIDGuaranteed(chartID: string) {
 		.innerJoin("song", "song.id", "chart.song_id")
 		.select(SELECT_CHART)
 		.where("chart.id", "=", chartID)
+		.limit(1)
 		.executeTakeFirst();
 
 	if (!row) {
@@ -198,6 +184,7 @@ export async function GetGoalForIDGuaranteed(goalID: string) {
 	const row = await DB.selectFrom("goal")
 		.select(SELECT_GOAL)
 		.where("goal.id", "=", goalID)
+		.limit(1)
 		.executeTakeFirst();
 
 	if (!row) {
@@ -216,6 +203,7 @@ export async function GetGoalSubscriptionForIDGuaranteed(goalID: string, userID:
 		.select(SELECT_GOAL_SUB_WITH_GOAL_GAME)
 		.where("goal_sub.goal_id", "=", goalID)
 		.where("goal_sub.user_id", "=", userID)
+		.limit(1)
 		.executeTakeFirst();
 
 	if (!row) {
@@ -231,6 +219,7 @@ export async function GetQuestForIDGuaranteed(questID: string) {
 	const row = await DB.selectFrom("quest")
 		.select(SELECT_QUEST)
 		.where("quest.id", "=", questID)
+		.limit(1)
 		.executeTakeFirst();
 
 	if (!row) {

@@ -121,7 +121,6 @@ describe("POST /api/v1/import/orphans", () => {
 		await DB.insertInto("song")
 			.values({
 				id: "S_IMP_ORPHAN",
-				legacy_id: 1,
 				game_group: "iidx",
 				title: "5.1.1.",
 				artist: "dj nagureo",
@@ -210,6 +209,7 @@ describe("POST /api/v1/import/orphans", () => {
 
 		const remaining = await DB.selectFrom("orphan_score")
 			.select((eb) => eb.fn.countAll<number>().as("c"))
+			.limit(1)
 			.executeTakeFirstOrThrow();
 
 		expect(Number(remaining.c)).toBe(1);

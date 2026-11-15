@@ -23,7 +23,6 @@ async function seedIidx511Chart() {
 	await DB.insertInto("song")
 		.values({
 			id: Testing511Song.id,
-			legacy_id: 1,
 			game_group: "iidx",
 			title: Testing511Song.title,
 			artist: Testing511Song.artist,
@@ -170,6 +169,7 @@ describe("UpdateGoalsForUser", () => {
 			.selectAll()
 			.where("goal_id", "=", "FAKE_GOAL_ID")
 			.where("user_id", "=", userId)
+			.limit(1)
 			.executeTakeFirstOrThrow();
 
 		expect(r).toMatchObject({
@@ -253,6 +253,7 @@ describe("UpdateGoalsForUser", () => {
 			.selectAll()
 			.where("goal_id", "=", "FAKE_GOAL_ID")
 			.where("user_id", "=", userId)
+			.limit(1)
 			.executeTakeFirstOrThrow();
 
 		expect(r).toMatchObject({
@@ -499,6 +500,7 @@ describe("ProcessGoal", () => {
 			.select(SELECT_GOAL_SUB_WITH_GOAL_GAME)
 			.where("goal_sub.goal_id", "=", HC511Goal.goalID)
 			.where("goal_sub.user_id", "=", userId)
+			.limit(1)
 			.executeTakeFirstOrThrow();
 
 		const goalSub = ToGoalSubscriptionDocument(row);

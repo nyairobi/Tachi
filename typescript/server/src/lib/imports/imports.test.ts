@@ -16,7 +16,6 @@ async function seedIidx511Chart() {
 	await DB.insertInto("song")
 		.values({
 			id: Testing511Song.id,
-			legacy_id: 1,
 			game_group: "iidx",
 			title: Testing511Song.title,
 			artist: Testing511Song.artist,
@@ -170,20 +169,24 @@ describe("RevertImport", () => {
 		const importRow = await DB.selectFrom("import")
 			.select("id")
 			.where("id", "=", importId)
+			.limit(1)
 			.executeTakeFirst();
 		expect(importRow).toBeUndefined();
 
 		const s1 = await DB.selectFrom("raw_score")
 			.select("id")
 			.where("id", "=", "score_1")
+			.limit(1)
 			.executeTakeFirst();
 		const s2 = await DB.selectFrom("raw_score")
 			.select("id")
 			.where("id", "=", "score_2")
+			.limit(1)
 			.executeTakeFirst();
 		const s3 = await DB.selectFrom("raw_score")
 			.select("id")
 			.where("id", "=", "score_3")
+			.limit(1)
 			.executeTakeFirst();
 
 		expect(s1).toBeUndefined();
@@ -256,24 +259,28 @@ describe("RevertImport", () => {
 		const sess = await DB.selectFrom("session")
 			.select("session.id")
 			.where("session.id", "=", sessionId)
+			.limit(1)
 			.executeTakeFirst();
 		expect(sess).toBeUndefined();
 
 		const link = await DB.selectFrom("import_session")
 			.select("import_session.row_id")
 			.where("import_session.session_id", "=", sessionId)
+			.limit(1)
 			.executeTakeFirst();
 		expect(link).toBeUndefined();
 
 		const deletedScore = await DB.selectFrom("raw_score")
 			.select("id")
 			.where("id", "=", scoreId)
+			.limit(1)
 			.executeTakeFirst();
 		expect(deletedScore).toBeUndefined();
 
 		const deletedImport = await DB.selectFrom("import")
 			.select("import.id")
 			.where("import.id", "=", importId)
+			.limit(1)
 			.executeTakeFirst();
 		expect(deletedImport).toBeUndefined();
 	});
@@ -301,6 +308,7 @@ describe("RevertImport", () => {
 			.select("pb.row_id")
 			.where("pb.user_id", "=", userId)
 			.where("pb.chart_id", "=", chartId)
+			.limit(1)
 			.executeTakeFirst();
 		expect(pbBefore, "PB should exist before revert").toBeDefined();
 
@@ -312,6 +320,7 @@ describe("RevertImport", () => {
 			.select("pb.row_id")
 			.where("pb.user_id", "=", userId)
 			.where("pb.chart_id", "=", chartId)
+			.limit(1)
 			.executeTakeFirst();
 		expect(pbAfter, "stale PB must be deleted after revert").toBeUndefined();
 	});
@@ -363,6 +372,7 @@ describe("RevertImport", () => {
 			.select("pb.row_id")
 			.where("pb.user_id", "=", userId)
 			.where("pb.chart_id", "=", chartId)
+			.limit(1)
 			.executeTakeFirst();
 		expect(pbAfter, "PB should still exist when another score remains").toBeDefined();
 
@@ -438,6 +448,7 @@ describe("RevertImport", () => {
 			.select("pb.row_id")
 			.where("pb.user_id", "=", userId)
 			.where("pb.chart_id", "=", chartId)
+			.limit(1)
 			.executeTakeFirst();
 		expect(pbBefore, "PB must exist before revert").toBeDefined();
 
@@ -461,6 +472,7 @@ describe("RevertImport", () => {
 		const importRow = await DB.selectFrom("import")
 			.select("import.id")
 			.where("import.id", "=", importId)
+			.limit(1)
 			.executeTakeFirst();
 		expect(importRow, "import row must be deleted").toBeUndefined();
 
@@ -469,6 +481,7 @@ describe("RevertImport", () => {
 			.select("pb.row_id")
 			.where("pb.user_id", "=", userId)
 			.where("pb.chart_id", "=", chartId)
+			.limit(1)
 			.executeTakeFirst();
 		expect(pbAfter, "stale PB must be deleted after revert").toBeUndefined();
 
@@ -503,10 +516,12 @@ describe("RevertImport", () => {
 		const gone1 = await DB.selectFrom("orphan_score")
 			.select("orphan_score.orphan_id")
 			.where("orphan_score.orphan_id", "=", "orphan-del-1")
+			.limit(1)
 			.executeTakeFirst();
 		const gone2 = await DB.selectFrom("orphan_score")
 			.select("orphan_score.orphan_id")
 			.where("orphan_score.orphan_id", "=", "orphan-del-2")
+			.limit(1)
 			.executeTakeFirst();
 		expect(gone1, "orphan linked to reverted import must be deleted").toBeUndefined();
 		expect(gone2, "orphan linked to reverted import must be deleted").toBeUndefined();
@@ -515,10 +530,12 @@ describe("RevertImport", () => {
 		const keptOther = await DB.selectFrom("orphan_score")
 			.select("orphan_score.orphan_id")
 			.where("orphan_score.orphan_id", "=", "orphan-del-other")
+			.limit(1)
 			.executeTakeFirst();
 		const keptNull = await DB.selectFrom("orphan_score")
 			.select("orphan_score.orphan_id")
 			.where("orphan_score.orphan_id", "=", "orphan-del-null")
+			.limit(1)
 			.executeTakeFirst();
 		expect(keptOther, "orphan from a different import must not be deleted").toBeDefined();
 		expect(keptNull, "orphan with no import_id must not be deleted").toBeDefined();
@@ -545,6 +562,7 @@ describe("RevertImport", () => {
 			.select("pb.row_id")
 			.where("pb.user_id", "=", userId)
 			.where("pb.chart_id", "=", chartId)
+			.limit(1)
 			.executeTakeFirstOrThrow();
 
 		const composedBefore = await DB.selectFrom("pb_composed_from")

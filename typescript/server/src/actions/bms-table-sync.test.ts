@@ -37,7 +37,6 @@ vi.mock("tachi-common", async (importOriginal) => {
 describe("ACTION_BMSTableSync", () => {
 	const songNewID = "song-bms-action-test";
 	const chartId = CreateChartID();
-	const legacySongId = 884_001;
 	let adminId: number;
 
 	beforeEach(async () => {
@@ -66,7 +65,6 @@ describe("ACTION_BMSTableSync", () => {
 		await DB.insertInto("song")
 			.values({
 				id: songNewID,
-				legacy_id: legacySongId,
 				game_group: "bms",
 				title: "Unit Song",
 				artist: "Unit",
@@ -115,6 +113,7 @@ describe("ACTION_BMSTableSync", () => {
 		const chartRow = await DB.selectFrom("chart")
 			.select("data")
 			.where("id", "=", chartId)
+			.limit(1)
 			.executeTakeFirstOrThrow();
 
 		const folders = (chartRow.data as { tableFolders: Record<string, string> }).tableFolders;
@@ -123,6 +122,7 @@ describe("ACTION_BMSTableSync", () => {
 		const songRow = await DB.selectFrom("song")
 			.select("data")
 			.where("id", "=", songNewID)
+			.limit(1)
 			.executeTakeFirstOrThrow();
 
 		const ts = (songRow.data as { tableString: string | null }).tableString;

@@ -69,7 +69,6 @@ describe("PUT /api/v1/users/:userID/games/:game/showcase", () => {
 		await DB.insertInto("song")
 			.values({
 				id: chartId,
-				legacy_id: 77_000 + Math.floor(Math.random() * 1000),
 				game_group: "iidx",
 				title: "Showcase Put",
 				artist: "Test",
@@ -110,6 +109,7 @@ describe("PUT /api/v1/users/:userID/games/:game/showcase", () => {
 			.select("game_profile.showcase")
 			.where("game_profile.user_id", "=", userId)
 			.where("game_profile.game", "=", "iidx-sp")
+			.limit(1)
 			.executeTakeFirst();
 
 		expect(row).toBeDefined();

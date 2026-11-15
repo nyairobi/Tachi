@@ -27,7 +27,6 @@ describe("CreatePBMergeFor (Postgres)", () => {
 		await DB.insertInto("song")
 			.values({
 				id: songId,
-				legacy_id: 500_000 + n,
 				game_group: "iidx",
 				title: "S",
 				artist: "A",
@@ -148,6 +147,7 @@ describe("CreatePBMergeFor (Postgres)", () => {
 		const picked = await DB.selectFrom("score")
 			.select("id")
 			.where("id", "=", result!.scoreID)
+			.limit(1)
 			.executeTakeFirst();
 		expect(picked?.id).toContain(String(2_000_000));
 	});

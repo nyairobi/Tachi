@@ -20,7 +20,6 @@ async function seed511Chart() {
 	await DB.insertInto("song")
 		.values({
 			id: Testing511Song.id,
-			legacy_id: 1,
 			game_group: "iidx",
 			title: Testing511Song.title,
 			artist: Testing511Song.artist,
@@ -82,6 +81,7 @@ describe("RunScoreImportOnce (ported from score-import.oldtest.ts)", () => {
 		const tracker = await DB.selectFrom("import_tracker")
 			.select("import_id")
 			.where("import_id", "=", "mockImportID")
+			.limit(1)
 			.executeTakeFirst();
 
 		expect(tracker).toBeUndefined();
@@ -170,7 +170,6 @@ async function seedJubeatChartArrayInGameID(opts: { chartId: string; legacyId: n
 	await DB.insertInto("song")
 		.values({
 			id: `${TestingJubeatSong.id}-smoke-${opts.chartId}`,
-			legacy_id: opts.legacyId,
 			game_group: "jubeat",
 			title: TestingJubeatSong.title,
 			artist: TestingJubeatSong.artist,
@@ -210,7 +209,6 @@ async function seedJubeatChartScalarInGameID(opts: {
 	await DB.insertInto("song")
 		.values({
 			id: `${TestingJubeatSong.id}-${opts.songIdSuffix}`,
-			legacy_id: opts.legacyId,
 			game_group: "jubeat",
 			title: TestingJubeatSong.title,
 			artist: TestingJubeatSong.artist,
@@ -283,6 +281,7 @@ describe("batch-manual score import (smoke)", () => {
 			.select((eb) => eb.fn.countAll<number>().as("c"))
 			.where("import_id", "=", importID)
 			.where("committed", "=", true)
+			.limit(1)
 			.executeTakeFirst();
 
 		expect(Number(nCommitted?.c)).toBe(1);
@@ -414,6 +413,7 @@ describe("batch-manual score import (smoke)", () => {
 			.select((eb) => eb.fn.countAll<number>().as("c"))
 			.where("import_id", "=", importID)
 			.where("committed", "=", true)
+			.limit(1)
 			.executeTakeFirst();
 
 		expect(Number(nCommitted?.c)).toBe(2);

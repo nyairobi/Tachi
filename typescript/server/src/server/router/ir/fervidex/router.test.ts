@@ -42,7 +42,6 @@ async function seedIidx511SpaWithFervidexHash() {
 	await DB.insertInto("song")
 		.values({
 			id: Testing511Song.id,
-			legacy_id: 511,
 			game_group: "iidx",
 			title: Testing511Song.title,
 			artist: Testing511Song.artist,
@@ -252,6 +251,7 @@ describe("POST /ir/fervidex/class/submit (Postgres)", () => {
 				.select("classes")
 				.where("user_id", "=", 1)
 				.where("game", "=", "iidx-sp")
+				.limit(1)
 				.executeTakeFirstOrThrow();
 
 			const classes = typeof gp.classes === "string" ? JSON.parse(gp.classes) : gp.classes;
@@ -262,6 +262,7 @@ describe("POST /ir/fervidex/class/submit (Postgres)", () => {
 				.where("user_id", "=", 1)
 				.where("game", "=", "iidx-sp")
 				.orderBy("timestamp", "desc")
+				.limit(1)
 				.executeTakeFirstOrThrow();
 
 			expect(ach).toMatchObject({
@@ -285,6 +286,7 @@ describe("POST /ir/fervidex/class/submit (Postgres)", () => {
 				.select("classes")
 				.where("user_id", "=", 1)
 				.where("game", "=", "iidx-dp")
+				.limit(1)
 				.executeTakeFirstOrThrow();
 
 			const classes = typeof gp.classes === "string" ? JSON.parse(gp.classes) : gp.classes;
@@ -358,6 +360,7 @@ describe("POST /ir/fervidex/score/submit (Postgres)", () => {
 			.select((eb) => eb.fn.countAll<number>().as("c"))
 			.where("user_id", "=", 1)
 			.where("game", "=", "iidx-sp")
+			.limit(1)
 			.executeTakeFirst();
 
 		expect(Number(row?.c)).toBe(1);
@@ -376,6 +379,7 @@ describe("POST /ir/fervidex/score/submit (Postgres)", () => {
 			.select((eb) => eb.fn.countAll<number>().as("c"))
 			.where("user_id", "=", 1)
 			.where("game", "=", "iidx-sp")
+			.limit(1)
 			.executeTakeFirst();
 
 		expect(Number(row?.c)).toBe(1);

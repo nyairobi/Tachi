@@ -13,7 +13,6 @@ async function seed511Chart() {
 	await DB.insertInto("song")
 		.values({
 			id: Testing511Song.id,
-			legacy_id: 1,
 			game_group: "iidx",
 			title: Testing511Song.title,
 			artist: Testing511Song.artist,
@@ -109,6 +108,7 @@ describe("score-importing duplicate score ID regression", () => {
 
 		const rowCount = await DB.selectFrom("raw_score")
 			.select((eb) => eb.fn.countAll().as("c"))
+			.limit(1)
 			.executeTakeFirst()
 			.then((r) => Number(r?.c ?? 0));
 
@@ -133,6 +133,7 @@ describe("score-importing duplicate score ID regression", () => {
 
 		const rowCount = await DB.selectFrom("raw_score")
 			.select((eb) => eb.fn.countAll().as("c"))
+			.limit(1)
 			.executeTakeFirst()
 			.then((r) => Number(r?.c ?? 0));
 

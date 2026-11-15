@@ -93,7 +93,6 @@ async function seed511SpaAndDpa() {
 	await DB.insertInto("song")
 		.values({
 			id: Testing511Song.id,
-			legacy_id: 511,
 			game_group: "iidx",
 			title: Testing511Song.title,
 			artist: Testing511Song.artist,
@@ -338,6 +337,7 @@ describe("ConverterIRFervidex", () => {
 		const row = await DB.selectFrom("score")
 			.select("highlight")
 			.where("id", "=", scoreID)
+			.limit(1)
 			.executeTakeFirst();
 
 		expect(row?.highlight).toBe(true);

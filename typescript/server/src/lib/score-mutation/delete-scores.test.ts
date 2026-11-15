@@ -22,7 +22,6 @@ async function seedIidx511Chart() {
 	await DB.insertInto("song")
 		.values({
 			id: Testing511Song.id,
-			legacy_id: 1,
 			game_group: "iidx",
 			title: Testing511Song.title,
 			artist: Testing511Song.artist,
@@ -106,6 +105,7 @@ async function loadScoreDocById(scoreId: string) {
 		.leftJoin("import", "import.id", "score.import_id")
 		.select(SELECT_SCORE_DOCUMENT)
 		.where("score.id", "=", scoreId)
+		.limit(1)
 		.executeTakeFirstOrThrow();
 	return ToScoreDocument(row as ScoreDocumentJoinRow);
 }
@@ -193,6 +193,7 @@ describe("DeleteMultipleScores", () => {
 		const deletedScore = await DB.selectFrom("score")
 			.select("id")
 			.where("id", "=", scoreId)
+			.limit(1)
 			.executeTakeFirst();
 
 		expect(deletedScore).toBeUndefined();
@@ -200,18 +201,21 @@ describe("DeleteMultipleScores", () => {
 		const sess = await DB.selectFrom("session")
 			.select("id")
 			.where("id", "=", sessionId)
+			.limit(1)
 			.executeTakeFirst();
 		expect(sess).toBeUndefined();
 
 		const link = await DB.selectFrom("import_session")
 			.select("row_id")
 			.where("session_id", "=", sessionId)
+			.limit(1)
 			.executeTakeFirst();
 		expect(link).toBeUndefined();
 
 		const importStill = await DB.selectFrom("import")
 			.select("import.id")
 			.where("import.id", "=", importId)
+			.limit(1)
 			.executeTakeFirst();
 		expect(importStill).toEqual({ id: importId });
 	});
@@ -230,6 +234,7 @@ describe("DeleteMultipleScores", () => {
 			.select("pb.row_id")
 			.where("pb.user_id", "=", userId)
 			.where("pb.chart_id", "=", chartId)
+			.limit(1)
 			.executeTakeFirst();
 		expect(pbBefore).toBeDefined();
 
@@ -240,6 +245,7 @@ describe("DeleteMultipleScores", () => {
 			.select("pb.row_id")
 			.where("pb.user_id", "=", userId)
 			.where("pb.chart_id", "=", chartId)
+			.limit(1)
 			.executeTakeFirst();
 		expect(pbAfter).toBeUndefined();
 	});
@@ -264,6 +270,7 @@ describe("DeleteMultipleScores", () => {
 			.select("pb.row_id")
 			.where("pb.user_id", "=", userId)
 			.where("pb.chart_id", "=", chartId)
+			.limit(1)
 			.executeTakeFirst();
 		expect(pbAfter).toBeDefined();
 
@@ -341,6 +348,7 @@ describe("DeleteMultipleScores", () => {
 		const deletedScore = await DB.selectFrom("score")
 			.select("score.id")
 			.where("score.id", "=", scoreIdA)
+			.limit(1)
 			.executeTakeFirst();
 		expect(deletedScore, "importA score must be deleted").toBeUndefined();
 
@@ -348,6 +356,7 @@ describe("DeleteMultipleScores", () => {
 		const survivingScore = await DB.selectFrom("score")
 			.select(["score.id", "score.session_id"])
 			.where("score.id", "=", scoreIdB)
+			.limit(1)
 			.executeTakeFirst();
 		expect(survivingScore, "importB score must survive").toBeDefined();
 		expect(survivingScore!.session_id, "importB score must retain session link").toBe(
@@ -358,6 +367,7 @@ describe("DeleteMultipleScores", () => {
 		const sessionRow = await DB.selectFrom("session")
 			.select("session.id")
 			.where("session.id", "=", sessionId)
+			.limit(1)
 			.executeTakeFirst();
 		expect(sessionRow, "session must survive partial revert").toBeDefined();
 	});
@@ -377,6 +387,7 @@ describe("DeleteMultipleScores", () => {
 			.select("pb.row_id")
 			.where("pb.user_id", "=", userId)
 			.where("pb.chart_id", "=", chartId)
+			.limit(1)
 			.executeTakeFirst();
 		expect(pbBefore, "PB must exist before the batch delete").toBeDefined();
 
@@ -397,6 +408,7 @@ describe("DeleteMultipleScores", () => {
 			.select("pb.row_id")
 			.where("pb.user_id", "=", userId)
 			.where("pb.chart_id", "=", chartId)
+			.limit(1)
 			.executeTakeFirst();
 		expect(pbAfter, "stale PB must be deleted").toBeUndefined();
 

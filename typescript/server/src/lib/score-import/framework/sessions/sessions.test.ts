@@ -21,7 +21,6 @@ async function seed511() {
 	await DB.insertInto("song")
 		.values({
 			id: Testing511Song.id,
-			legacy_id: 1,
 			game_group: "iidx",
 			title: Testing511Song.title,
 			artist: Testing511Song.artist,
@@ -109,6 +108,7 @@ describe("CreateSessions (ported from sessions.oldtest.ts)", () => {
 			.select((eb) => eb.fn.countAll<number>().as("c"))
 			.where("user_id", "=", 1)
 			.where("game", "=", "iidx-sp")
+			.limit(1)
 			.executeTakeFirst();
 
 		expect(Number(count?.c)).toBe(1);
@@ -131,6 +131,7 @@ describe("CreateSessions (ported from sessions.oldtest.ts)", () => {
 		const c = await DB.selectFrom("session")
 			.select((eb) => eb.fn.countAll<number>().as("n"))
 			.where("user_id", "=", 1)
+			.limit(1)
 			.executeTakeFirst();
 		expect(Number(c?.n)).toBe(0);
 	});

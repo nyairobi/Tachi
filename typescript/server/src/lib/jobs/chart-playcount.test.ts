@@ -24,6 +24,7 @@ async function getCachedPlaycount(chartId: string): Promise<number> {
 	const row = await DB.selectFrom("chart_playcount")
 		.select("chart_playcount.playcount")
 		.where("chart_playcount.chart_id", "=", chartId)
+		.limit(1)
 		.executeTakeFirst();
 
 	return row?.playcount ?? 0;
@@ -57,7 +58,6 @@ describe("chart_playcount triggers", () => {
 		await DB.insertInto("song")
 			.values({
 				id: songID,
-				legacy_id: 9_010_001,
 				game_group: "iidx",
 				title: "Playcount Trigger Song",
 				artist: "X",
@@ -106,7 +106,6 @@ describe("chart_playcount triggers", () => {
 		await DB.insertInto("song")
 			.values({
 				id: songID,
-				legacy_id: 9_010_002,
 				game_group: "iidx",
 				title: "Playcount Batch Song",
 				artist: "X",
@@ -153,7 +152,6 @@ describe("chart_playcount triggers", () => {
 		await DB.insertInto("song")
 			.values({
 				id: songID,
-				legacy_id: 9_010_003,
 				game_group: "iidx",
 				title: "Playcount Move Song",
 				artist: "X",
@@ -219,7 +217,6 @@ describe("chart_playcount triggers", () => {
 		await DB.insertInto("song")
 			.values({
 				id: songID,
-				legacy_id: 9_010_005,
 				game_group: "iidx",
 				title: "Popularity Cache Song",
 				artist: "X",
@@ -270,7 +267,6 @@ describe("chart_playcount triggers", () => {
 		await DB.insertInto("song")
 			.values({
 				id: songID,
-				legacy_id: 9_010_006,
 				game_group: "iidx",
 				title: "Reconcile Song",
 				artist: "X",

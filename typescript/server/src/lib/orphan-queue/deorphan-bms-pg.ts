@@ -2,7 +2,6 @@ import { GetChartByIdForGame } from "#lib/db-formats/chart";
 import { log } from "#lib/log/log";
 import { LEGACY_CHART_ID_LENGTH } from "#lib/score-import/framework/score-importing/score-id";
 import DB from "#services/pg/db";
-import { GetNextBmsPmsSongLegacyId } from "#utils/db";
 import { Random20Hex } from "#utils/misc";
 import { sql } from "kysely";
 import {
@@ -32,6 +31,7 @@ export async function DeorphanBmsIfInOrphanChartPg(
 		.select(["orphan_chart.id", "orphan_chart.chart_doc", "orphan_chart.song_doc"])
 		.where("orphan_chart.game", "=", game)
 		.where(hashMatch)
+		.limit(1)
 		.executeTakeFirst();
 
 	if (!orphanRow) {
@@ -49,7 +49,6 @@ export async function DeorphanBmsIfInOrphanChartPg(
 		throw new Error(`DeorphanBmsIfInOrphanChartPg called with non-BMS/PMS game: ${game}`);
 	}
 
-	const songLegacyId = await GetNextBmsPmsSongLegacyId(gameGroup);
 	const songNewID = CreateSongID();
 
 	songDoc.id = songNewID;
@@ -66,7 +65,6 @@ export async function DeorphanBmsIfInOrphanChartPg(
 			.insertInto("song")
 			.values({
 				id: songNewID,
-				legacy_id: songLegacyId,
 				game_group: gameGroup,
 				title: songDoc.title,
 				artist: songDoc.artist,

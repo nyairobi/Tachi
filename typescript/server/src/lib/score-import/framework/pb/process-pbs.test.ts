@@ -15,7 +15,6 @@ async function seedIidx511Chart() {
 	await DB.insertInto("song")
 		.values({
 			id: Testing511Song.id,
-			legacy_id: 1,
 			game_group: "iidx",
 			title: Testing511Song.title,
 			artist: Testing511Song.artist,
@@ -88,7 +87,6 @@ async function seedExtraChart(chartId: string, songLegacy: number) {
 	await DB.insertInto("song")
 		.values({
 			id: songId,
-			legacy_id: songLegacy,
 			game_group: "iidx",
 			title: "T",
 			artist: "A",
@@ -284,6 +282,7 @@ describe("ProcessPBs", () => {
 			.select("pb.row_id")
 			.where("pb.user_id", "=", userId)
 			.where("pb.chart_id", "=", Testing511SPA.chartID)
+			.limit(1)
 			.executeTakeFirst();
 		expect(pbBefore).toBeDefined();
 
@@ -298,6 +297,7 @@ describe("ProcessPBs", () => {
 			.select("pb.row_id")
 			.where("pb.user_id", "=", userId)
 			.where("pb.chart_id", "=", Testing511SPA.chartID)
+			.limit(1)
 			.executeTakeFirst();
 		expect(pbAfter).toBeUndefined();
 	});
@@ -320,6 +320,7 @@ describe("ProcessPBs", () => {
 			.select("pb.row_id")
 			.where("pb.user_id", "=", userId)
 			.where("pb.chart_id", "=", Testing511SPA.chartID)
+			.limit(1)
 			.executeTakeFirstOrThrow();
 
 		// Verify pb_composed_from was created.
@@ -344,6 +345,7 @@ describe("ProcessPBs", () => {
 		const pbAfter = await DB.selectFrom("pb")
 			.select("pb.row_id")
 			.where("pb.row_id", "=", pbBefore.row_id)
+			.limit(1)
 			.executeTakeFirst();
 		expect(pbAfter).toBeUndefined();
 	});
@@ -380,6 +382,7 @@ describe("ProcessPBs", () => {
 			.select("pb.row_id")
 			.where("pb.user_id", "=", userId)
 			.where("pb.chart_id", "=", Testing511SPA.chartID)
+			.limit(1)
 			.executeTakeFirst();
 		expect(pbAfter).toBeDefined();
 	});

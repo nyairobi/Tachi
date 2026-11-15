@@ -67,7 +67,7 @@ API_V1_ROUTER.rawAdd(
 		{},
 		{ allowExcessKeys: true },
 	),
-	async (req, res) => {
+	(req, res) => {
 		if (!req.file) {
 			return res.status(400).json({
 				success: false,
@@ -107,7 +107,7 @@ API_V1_ROUTER.rawAdd(
  *
  * @name POST /api/v1/import/from-api
  */
-API_V1_ROUTER.add("POST /import/from-api", async ({ input, req }) => {
+API_V1_ROUTER.add("POST /import/from-api", ({ input, req }) => {
 	const importType = assertEnabledApiImportType(input.importType);
 	const importID = Random20Hex();
 	const userID = req[SYMBOL_TACHI_API_AUTH].userID!;
@@ -156,6 +156,7 @@ API_V1_ROUTER.add("POST /import/class", withPermission("submit_score"), async ({
 	const account = await DB.selectFrom("account")
 		.select(["can_import_provided_class"])
 		.where("id", "=", userID)
+		.limit(1)
 		.executeTakeFirst();
 
 	if (!account?.can_import_provided_class) {
@@ -166,6 +167,7 @@ API_V1_ROUTER.add("POST /import/class", withPermission("submit_score"), async ({
 		.select("game_profile.user_id")
 		.where("game_profile.user_id", "=", userID)
 		.where("game_profile.game", "=", game)
+		.limit(1)
 		.executeTakeFirst();
 
 	if (!gameProfile) {

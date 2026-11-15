@@ -19,7 +19,6 @@ async function seedIidx511ForPb() {
 	await DB.insertInto("song")
 		.values({
 			id: Testing511Song.id,
-			legacy_id: 1,
 			game_group: "iidx",
 			title: Testing511Song.title,
 			artist: Testing511Song.artist,
@@ -121,6 +120,7 @@ describe("UpdateUsersGamePlaytypeStats (ported from update-ugpt-stats.oldtest.ts
 			.selectAll()
 			.where("user_id", "=", 1)
 			.where("game", "=", "iidx-sp")
+			.limit(1)
 			.executeTakeFirstOrThrow();
 
 		const ratings = typeof gp.ratings === "string" ? JSON.parse(gp.ratings) : gp.ratings;
@@ -142,7 +142,6 @@ describe("UpdateUsersGamePlaytypeStats (ported from update-ugpt-stats.oldtest.ts
 			await DB.insertInto("song")
 				.values({
 					id: `s_${fakeChart}`,
-					legacy_id: 50_000 + e,
 					game_group: "iidx",
 					title: "T",
 					artist: "A",
@@ -187,6 +186,7 @@ describe("UpdateUsersGamePlaytypeStats (ported from update-ugpt-stats.oldtest.ts
 			.select("ratings")
 			.where("user_id", "=", 1)
 			.where("game", "=", "iidx-sp")
+			.limit(1)
 			.executeTakeFirstOrThrow();
 
 		const r = typeof gp.ratings === "string" ? JSON.parse(gp.ratings) : gp.ratings;
@@ -227,6 +227,7 @@ describe("UpdateUsersGamePlaytypeStats (ported from update-ugpt-stats.oldtest.ts
 			.select("classes")
 			.where("user_id", "=", 1)
 			.where("game", "=", "iidx-sp")
+			.limit(1)
 			.executeTakeFirstOrThrow();
 		const cls = typeof gp.classes === "string" ? JSON.parse(gp.classes) : gp.classes;
 		expect((cls as { dan: string }).dan).toBe("KAIDEN");
@@ -264,6 +265,7 @@ describe("UpdateUsersGamePlaytypeStats (ported from update-ugpt-stats.oldtest.ts
 			.select("classes")
 			.where("user_id", "=", 1)
 			.where("game", "=", "iidx-sp")
+			.limit(1)
 			.executeTakeFirstOrThrow();
 		const cls = typeof gp.classes === "string" ? JSON.parse(gp.classes) : gp.classes;
 		expect((cls as { dan: string }).dan).toBe("KAIDEN");

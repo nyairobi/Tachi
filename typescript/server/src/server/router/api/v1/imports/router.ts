@@ -146,25 +146,17 @@ API_V1_ROUTER.add("POST /imports/:importID/revert", withImport, async ({ params,
 
 // ─── Import poll-status ───────────────────────────────────────────────────────
 
-async function findJobQueueForImport(importID: string) {
+function findJobQueueForImport(importID: string) {
 	return DB.selectFrom("job_queue")
 		.selectAll()
 		.where("job_queue.scope", "=", `import:${importID}`)
 		.orderBy("job_queue.created_at", "desc")
+		.limit(1)
 		.executeTakeFirst();
 }
 
 /**
  * Poll the status of a queued/in-progress import.
- *
- * Completion is determined by the `import.status` column, which starts as
- * `in_progress` when the stub row is created and is set to `completed`
- * atomically inside {@link finalizeImportToPostgres}. This avoids the
- * previous bug where a stub row was enough to report "completed" while
- * scores were still being inserted.
- *
- * When no `import` row exists yet (parsing phase) or it was cleaned up on
- * failure, we fall back to `job_queue` and `import_tracker` state.
  *
  * @name GET /api/v1/imports/:importID/poll-status
  */
@@ -172,6 +164,7 @@ API_V1_ROUTER.add("GET /imports/:importID/poll-status", async ({ params }) => {
 	const importRow = await DB.selectFrom("import")
 		.select(["import.id", "import.status"])
 		.where("import.id", "=", params.importID)
+		.limit(1)
 		.executeTakeFirst();
 
 	if (importRow) {
@@ -248,8 +241,6 @@ API_V1_ROUTER.add("GET /imports/:importID/poll-status", async ({ params }) => {
 	throw new ExpectedErr(500, "Unrecognised job queue state.");
 });
 
-// ─── Import live-progress SSE stream ─────────────────────────────────────────
-
 /** Max time (ms) to hold an SSE connection open waiting for an import. */
 const IMPORT_STREAM_TIMEOUT_MS = 10 * 60 * 1000;
 
@@ -264,8 +255,6 @@ const IMPORT_STREAM_TIMEOUT_MS = 10 * 60 * 1000;
  * If the import has already completed or failed before the client connects,
  * the appropriate event is sent immediately and the connection is closed.
  *
- * No authentication is required (mirrors poll-status which is also public).
- *
  * @name GET /api/v1/imports/:importID/stream
  */
 API_V1_ROUTER.rawAdd("GET", "/imports/:importID/stream", async (req: Request, res: Response) => {
@@ -275,6 +264,7 @@ API_V1_ROUTER.rawAdd("GET", "/imports/:importID/stream", async (req: Request, re
 	const importRow = await DB.selectFrom("import")
 		.select(["import.id", "import.status"])
 		.where("import.id", "=", importID)
+		.limit(1)
 		.executeTakeFirst();
 
 	if (importRow?.status === "completed") {

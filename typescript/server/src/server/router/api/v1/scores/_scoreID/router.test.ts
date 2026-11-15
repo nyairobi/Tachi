@@ -20,7 +20,6 @@ async function seedTestingIidxScore() {
 	await DB.insertInto("song")
 		.values({
 			id: Testing511Song.id,
-			legacy_id: 1,
 			game_group: "iidx",
 			title: Testing511Song.title,
 			artist: Testing511Song.artist,
@@ -118,6 +117,7 @@ describe("PATCH /api/v1/scores/:scoreID", () => {
 		const row = await DB.selectFrom("score")
 			.select("comment")
 			.where("id", "=", "TESTING_SCORE_ID")
+			.limit(1)
 			.executeTakeFirstOrThrow();
 
 		expect(row.comment).toBe("hello_world");
@@ -132,6 +132,7 @@ describe("PATCH /api/v1/scores/:scoreID", () => {
 		const row = await DB.selectFrom("score")
 			.select("highlight")
 			.where("id", "=", "TESTING_SCORE_ID")
+			.limit(1)
 			.executeTakeFirstOrThrow();
 
 		expect(row.highlight).toBe(true);
@@ -151,6 +152,7 @@ describe("PATCH /api/v1/scores/:scoreID", () => {
 		const row = await DB.selectFrom("score")
 			.select("comment")
 			.where("id", "=", "TESTING_SCORE_ID")
+			.limit(1)
 			.executeTakeFirstOrThrow();
 
 		expect(row.comment).toBeNull();
@@ -232,6 +234,7 @@ describe("DELETE /api/v1/scores/:scoreID", () => {
 		const row = await DB.selectFrom("score")
 			.select("id")
 			.where("id", "=", "TESTING_SCORE_ID")
+			.limit(1)
 			.executeTakeFirst();
 
 		expect(row).toBeUndefined();
@@ -304,6 +307,7 @@ describe("DELETE /api/v1/scores/:scoreID", () => {
 		const row = await DB.selectFrom("score")
 			.select("id")
 			.where("id", "=", "someone_elses")
+			.limit(1)
 			.executeTakeFirst();
 
 		expect(row).toBeUndefined();

@@ -30,7 +30,6 @@ async function seed511() {
 	await DB.insertInto("song")
 		.values({
 			id: Testing511Song.id,
-			legacy_id: 1,
 			game_group: "iidx",
 			title: Testing511Song.title,
 			artist: Testing511Song.artist,
@@ -61,7 +60,6 @@ async function seedChunithmBbkk() {
 	await DB.insertInto("song")
 		.values({
 			id: CHUNITHMBBKKSong.id,
-			legacy_id: 900_001,
 			game_group: "chunithm",
 			title: CHUNITHMBBKKSong.title,
 			artist: CHUNITHMBBKKSong.artist,
@@ -93,6 +91,7 @@ async function countScoresForGame(game: V3Game) {
 		.select((eb) => eb.fn.countAll<number>().as("c"))
 		.where("user_id", "=", 1)
 		.where("game", "=", game)
+		.limit(1)
 		.executeTakeFirst();
 	return Number(row?.c ?? 0);
 }
@@ -302,7 +301,9 @@ Invalid value for percent, Expected a number between 0 and 100. Got 572.51908396
 			.send(deepmerge(baseBatchManual, { meta: { game: "nonsense" } }));
 
 		expect(res.body.success).toBe(false);
-		expect(String(res.body.description)).toMatch(/Invalid game group 'nonsense'/iu);
+		expect(String(res.body.description)).toBe(
+			"Do not provide 'playtype'. This is legacy code and barely supported.",
+		);
 	});
 
 	it("rejects unknown playtypes", async () => {
@@ -312,6 +313,8 @@ Invalid value for percent, Expected a number between 0 and 100. Got 572.51908396
 			.send(deepmerge(baseBatchManual, { meta: { playtype: "nonsense" } }));
 
 		expect(res.body.success).toBe(false);
-		expect(String(res.body.description)).toMatch(/Invalid playtype 'nonsense'/iu);
+		expect(String(res.body.description)).toBe(
+			"Do not provide 'playtype'. This is legacy code and barely supported.",
+		);
 	});
 });

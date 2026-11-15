@@ -30,7 +30,7 @@ import {
 	GetFoldersFromTable,
 } from "#lib/folders/folders";
 import { log } from "#lib/log/log";
-import { withChart, withGame, withGameGroup } from "#lib/router/middleware";
+import { withChart, withGame } from "#lib/router/middleware";
 import { success } from "#lib/router/typed-router";
 import { InvalidScoreFailure } from "#lib/score-import/framework/common/converter-failures";
 import { ResolveSongAndChart } from "#lib/score-import/import-types/common/batch-manual/converter";
@@ -83,6 +83,7 @@ import {
 
 import { API_V1_ROUTER } from "../_singleton";
 
+// TODO(zk): This caching is ridiculous
 const gptStatCache = new NodeCache();
 
 async function GetGameStats(
@@ -99,16 +100,19 @@ async function GetGameStats(
 		DB.selectFrom("score")
 			.select((eb) => eb.fn.countAll().as("c"))
 			.where("score.game", "=", game)
+			.limit(1)
 			.executeTakeFirst()
 			.then((r) => Number(r?.c ?? 0)),
 		DB.selectFrom("game_profile")
 			.select((eb) => eb.fn.countAll().as("c"))
 			.where("game_profile.game", "=", game)
+			.limit(1)
 			.executeTakeFirst()
 			.then((r) => Number(r?.c ?? 0)),
 		DB.selectFrom("chart")
 			.select((eb) => eb.fn.countAll().as("c"))
 			.where("chart.game", "=", game)
+			.limit(1)
 			.executeTakeFirst()
 			.then((r) => Number(r?.c ?? 0)),
 	]);
@@ -118,7 +122,6 @@ async function GetGameStats(
 	return { chartCount, playerCount, scoreCount };
 }
 
-/** Vitest: invalidate per-game stats cache after Postgres truncate (same process). */
 export function clearGameStatsCacheForTests(): void {
 	gptStatCache.flushAll();
 }
@@ -138,15 +141,6 @@ API_V1_ROUTER.add("GET /games", () => {
 		supportedGames: TachiConfig.GAME_GROUPS,
 	});
 });
-
-/**
- * Returns the configuration for this game.
- *
- * @name GET /api/v1/games/:gameGroup
- */
-API_V1_ROUTER.add("GET /games/:gameGroup", withGameGroup, ({ ctx }) =>
-	success(`Returned information for ${ctx.gameGroup}`, GetGameGroupConfig(ctx.gameGroup)),
-);
 
 /**
  * Returns the configuration for this game along with some statistics.
@@ -693,6 +687,7 @@ API_V1_ROUTER.add("GET /games/:game/targets/goals/:goalID", withGame, async ({ c
 		.select(SELECT_GOAL)
 		.where("goal.id", "=", params.goalID)
 		.where("goal.game", "=", v3Game)
+		.limit(1)
 		.executeTakeFirst();
 
 	if (!row) {
@@ -760,6 +755,7 @@ API_V1_ROUTER.add("GET /games/:game/targets/quests/:questID", withGame, async ({
 		.select(SELECT_QUEST)
 		.where("quest.id", "=", params.questID)
 		.where("quest.game", "=", v3Game)
+		.limit(1)
 		.executeTakeFirst();
 
 	if (!row) {

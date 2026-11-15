@@ -62,7 +62,6 @@ describe("POST /api/v1/admin/delete-score", () => {
 		await DB.insertInto("song")
 			.values({
 				id: Testing511Song.id,
-				legacy_id: 1,
 				game_group: "iidx",
 				title: Testing511Song.title,
 				artist: Testing511Song.artist,
@@ -118,6 +117,7 @@ describe("POST /api/v1/admin/delete-score", () => {
 		const row = await DB.selectFrom("score")
 			.select("id")
 			.where("id", "=", "deleteme")
+			.limit(1)
 			.executeTakeFirst();
 
 		expect(row).toBeUndefined();
@@ -155,7 +155,6 @@ describe("POST /api/v1/admin/recalc", () => {
 		await DB.insertInto("song")
 			.values({
 				id: Testing511Song.id,
-				legacy_id: 1,
 				game_group: "iidx",
 				title: Testing511Song.title,
 				artist: Testing511Song.artist,
@@ -188,6 +187,7 @@ describe("POST /api/v1/admin/recalc", () => {
 		const stillQueued = await DB.selectFrom("score_rederive")
 			.select("chart_id")
 			.where("chart_id", "=", chartId)
+			.limit(1)
 			.executeTakeFirst();
 
 		expect(stillQueued).toBeUndefined();
@@ -240,6 +240,7 @@ describe("POST /api/v1/admin/recalc-profiles", () => {
 			.select("game_profile_dirty.user_id")
 			.where("game_profile_dirty.user_id", "=", adminId)
 			.where("game_profile_dirty.game", "=", "iidx-sp")
+			.limit(1)
 			.executeTakeFirst();
 
 		expect(stillQueued).toBeUndefined();
@@ -289,7 +290,6 @@ describe("POST /api/v1/admin/recalc-pbs", () => {
 		await DB.insertInto("song")
 			.values({
 				id: Testing511Song.id,
-				legacy_id: 1,
 				game_group: "iidx",
 				title: Testing511Song.title,
 				artist: Testing511Song.artist,
@@ -346,6 +346,7 @@ describe("POST /api/v1/admin/recalc-pbs", () => {
 			.select(["pb_dirty.user_id", "pb_dirty.chart_id"])
 			.where("pb_dirty.user_id", "=", 2)
 			.where("pb_dirty.chart_id", "=", chartId)
+			.limit(1)
 			.executeTakeFirst();
 
 		expect(stillDirty).toBeUndefined();
