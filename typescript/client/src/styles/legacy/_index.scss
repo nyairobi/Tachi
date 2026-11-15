@@ -52,16 +52,10 @@
 	.title-cell-link-wide {
 		max-width: 200px;
 	}
-	.title-cell-link-narrow {
-		max-width: 200px;
-	}
 }
 
 @include media-breakpoint-up(md) {
 	.title-cell-link-wide {
-		max-width: 275px;
-	}
-	.title-cell-link-narrow {
 		max-width: 275px;
 	}
 }
@@ -71,13 +65,22 @@
 		max-width: 375px;
 	}
 	.title-cell-link-narrow {
-		max-width: 275px;
+		max-width: 100px;
+	}
+	.title-cell-link-tiny {
+		max-width: 60px;
 	}
 }
 
 @include media-breakpoint-up(xl) {
 	.title-cell-link-wide {
 		max-width: 575px;
+	}
+	.title-cell-link-narrow {
+		max-width: 275px;
+	}
+	.title-cell-link-tiny {
+		max-width: 155px;
 	}
 }
 
@@ -86,7 +89,8 @@
 		max-width: 800px;
 	}
 }
-
-.title-cell-link-tiny {
-	max-width: 160px;
+@include media-breakpoint-only(lg) {
+	.table-striped td {
+		padding: 0.7rem 0.7rem;
+	}
 }
