@@ -187,7 +187,7 @@ const main = async () => {
 							refresh: null,
 							refreshOmni: null,
 						},
-						releaseDate: inputSong.releaseDate
+						releaseDate: inputSong.releaseDate,
 					},
 					difficulty: inputChart.difficulty,
 					isPrimary: true,
