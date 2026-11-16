@@ -121,7 +121,7 @@ function SearchSongsTable({ game, search }: { search: string } & GameProps) {
 		],
 		[
 			"Playcount",
-			"Playcount",
+			"Plays",
 			NumericSOV((x) => x.__playcount),
 			(thProps) => (
 				<SortableTH
@@ -132,7 +132,7 @@ function SearchSongsTable({ game, search }: { search: string } & GameProps) {
 					key={`header-${"playcount"}`}
 					name={"Playcount"}
 					reverseSort={false}
-					shortName={"Playcount"}
+					shortName={"Plays"}
 					sortingName={"popularity"}
 				/>
 			),
