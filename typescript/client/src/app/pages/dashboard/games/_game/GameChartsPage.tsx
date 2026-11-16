@@ -2,7 +2,7 @@ import useSetSubheader from "#components/layout/header/useSetSubheader";
 import DifficultyCell from "#components/tables/cells/DifficultyCell";
 import TitleCell from "#components/tables/cells/TitleCell";
 import SortableTH from "#components/tables/components/SortableTH";
-import TachiTable from "#components/tables/components/TachiTable";
+import TachiTable, { Header } from "#components/tables/components/TachiTable";
 import { CascadingRatingValue } from "#components/tables/headers/ChartHeader";
 import ApiError from "#components/util/ApiError";
 import DebounceSearch from "#components/util/DebounceSearch";
@@ -12,7 +12,7 @@ import useApiQuery from "#components/util/query/useApiQuery";
 import { type GameProps } from "#types/react";
 import { CreateSongMap } from "#util/data";
 import { NumericSOV, StrSOV } from "#util/sorts";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import {
 	type ChartDocument,
@@ -49,6 +49,7 @@ function SearchSongsTable({ game, search }: { search: string } & GameProps) {
 	const params = new URLSearchParams({});
 	const gameConfig = GetGameConfig(game);
 	const hasReleaseDate = "releaseDate" in gameConfig.chartData.shape;
+	const includeReleaseTime = game !== "maimai" && game !== "museca"; // Exclude dead games
 
 	if (search !== "") {
 		params.append("search", search);
@@ -83,6 +84,82 @@ function SearchSongsTable({ game, search }: { search: string } & GameProps) {
 		});
 	}
 
+	const headers: Header<
+		{ __playcount: integer; __related: { song: SongDocument } } & ChartDocument
+	>[] = [
+		[
+			"Chart",
+			"Chart",
+			(a, b) => CascadingRatingValue(game, a, b),
+			(thProps) => (
+				<SortableTH
+					{...thProps}
+					changeSort={() => {}}
+					hideArrowDown
+					hideArrowUp
+					key={`header-Chart`}
+					name={"Chart"}
+					shortName={"Chart"}
+				/>
+			),
+		],
+		[
+			"Song Title",
+			"Song",
+			StrSOV((x) => x.__related.song.title),
+			(thProps) => (
+				<SortableTH
+					{...thProps}
+					changeSort={() => {}}
+					hideArrowDown
+					hideArrowUp
+					key={`header-Song Title`}
+					name={"Song Title"}
+					shortName={"Song"}
+				/>
+			),
+		],
+		[
+			"Playcount",
+			"Playcount",
+			NumericSOV((x) => x.__playcount),
+			(thProps) => (
+				<SortableTH
+					{...thProps}
+					changeSort={() => setOrderBy("popularity")}
+					currentSortMode={orderBy}
+					hideArrowUp
+					key={`header-${"playcount"}`}
+					name={"Playcount"}
+					reverseSort={false}
+					shortName={"Playcount"}
+					sortingName={"popularity"}
+				/>
+			),
+		],
+	];
+
+	if (includeReleaseTime) {
+		headers.push([
+			"Release time",
+			"Release",
+			StrSOV((x) => x.chartID),
+			(thProps) => (
+				<SortableTH
+					{...thProps}
+					changeSort={() => setOrderBy("latest")}
+					currentSortMode={orderBy}
+					hideArrowUp
+					key={`header-${"latest"}`}
+					name={hasReleaseDate ? "Release date" : "Added on"}
+					reverseSort={false}
+					shortName={hasReleaseDate ? "Release" : "Added"}
+					sortingName={"latest"}
+				/>
+			),
+		]);
+	}
+
 	return (
 		<>
 			{search === "" && (
@@ -97,76 +174,7 @@ function SearchSongsTable({ game, search }: { search: string } & GameProps) {
 			<TachiTable
 				dataset={dataset}
 				entryName="Charts"
-				headers={[
-					[
-						"Chart",
-						"Chart",
-						(a, b) => CascadingRatingValue(game, a, b),
-						(thProps) => (
-							<SortableTH
-								{...thProps}
-								changeSort={() => {}}
-								hideArrowDown
-								hideArrowUp
-								key={`header-Chart`}
-								name={"Chart"}
-								shortName={"Chart"}
-							/>
-						),
-					],
-					[
-						"Song Title",
-						"Song",
-						StrSOV((x) => x.__related.song.title),
-						(thProps) => (
-							<SortableTH
-								{...thProps}
-								changeSort={() => {}}
-								hideArrowDown
-								hideArrowUp
-								key={`header-Song Title`}
-								name={"Song Title"}
-								shortName={"Song"}
-							/>
-						),
-					],
-					[
-						"Playcount",
-						"Playcount",
-						NumericSOV((x) => x.__playcount),
-						(thProps) => (
-							<SortableTH
-								{...thProps}
-								changeSort={() => setOrderBy("popularity")}
-								currentSortMode={orderBy}
-								hideArrowUp
-								key={`header-${"playcount"}`}
-								name={"Playcount"}
-								reverseSort={false}
-								shortName={"Playcount"}
-								sortingName={"popularity"}
-							/>
-						),
-					],
-					[
-						"Release time",
-						"Release",
-						StrSOV((x) => x.chartID),
-						(thProps) => (
-							<SortableTH
-								{...thProps}
-								changeSort={() => setOrderBy("latest")}
-								currentSortMode={orderBy}
-								hideArrowUp
-								key={`header-${"latest"}`}
-								name={hasReleaseDate ? "Release date" : "Added on"}
-								reverseSort={false}
-								shortName={"Added on"}
-								sortingName={"latest"}
-							/>
-						),
-					],
-				]}
+				headers={headers}
 				rowFunction={(d) => (
 					<tr>
 						<DifficultyCell chart={d} game={game} />
@@ -183,20 +191,23 @@ function SearchSongsTable({ game, search }: { search: string } & GameProps) {
 						>
 							{d.__playcount}
 						</td>
-						<td
-							style={{
-								boxSizing: "border-box",
-								maxWidth: `150px`,
-								minWidth: 0,
-								overflow: "hidden",
-								textAlign: "center",
-								width: `150px`,
-							}}
-						>
-							{hasReleaseDate
-								? (d.data as { releaseDate: string }).releaseDate
-								: (inverseTachiID(d.chartID)?.toISOString().split("T")[0] ?? "—")}
-						</td>
+						{includeReleaseTime && (
+							<td
+								style={{
+									boxSizing: "border-box",
+									maxWidth: `150px`,
+									minWidth: 0,
+									overflow: "hidden",
+									textAlign: "center",
+									width: `150px`,
+								}}
+							>
+								{hasReleaseDate
+									? (d.data as { releaseDate: string }).releaseDate
+									: (inverseTachiID(d.chartID)?.toISOString().split("T")[0] ??
+										"—")}
+							</td>
+						)}
 					</tr>
 				)}
 				searchFunctions={{
